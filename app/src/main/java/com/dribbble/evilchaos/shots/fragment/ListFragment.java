@@ -14,7 +14,6 @@ import com.cjj.MaterialRefreshListener;
 import com.dribbble.evilchaos.shots.R;
 import com.dribbble.evilchaos.shots.adapter.ShotsAdapter;
 import com.dribbble.evilchaos.shots.entity.ShotItem;
-import com.dribbble.evilchaos.shots.entity.ShotsData;
 import com.dribbble.evilchaos.shots.http.BaseCallback;
 import com.dribbble.evilchaos.shots.http.OkHttpUtils;
 import com.dribbble.evilchaos.shots.util.API;
@@ -28,12 +27,10 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * Created by liujiachao on 2016/12/7.
- * https://api.dribbble.com/v1/shots?page=2&per_page=1&&access_token=bfca85ae4494581419c440a55187979b59affca89f581bc6fc9f07f6c3c71163
+ * Created by liujiachao on 2016/12/16.
  */
 
-public class HomeFragment extends Fragment {
-
+public class ListFragment extends Fragment {
 
     private OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
     private  static final int STATE_NORMAL=0;
@@ -41,21 +38,31 @@ public class HomeFragment extends Fragment {
     private  static final int STATE_MORE=2;
     private int state = STATE_NORMAL;
 
+
     private View mView;
-    private MaterialRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
+    private MaterialRefreshLayout mRefreshLayout;
     private ShotsAdapter adapter;
 
     private int page = 1;
     private int per_page = 30;
+    private int type;
 
+    private String category_url;
     private List<ShotItem> shotItems = new ArrayList<>();
+
+    public static ListFragment newInstance(int type) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(Constant.TYPE,type);
+        ListFragment fragment = new ListFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        mView = inflater.inflate(R.layout.home_fragment,container,false);
+        mView = inflater.inflate(R.layout.shots_category,container,false);
         return mView;
     }
 
@@ -66,8 +73,10 @@ public class HomeFragment extends Fragment {
     }
 
     private void initViews() {
-        mRefreshLayout = (MaterialRefreshLayout)mView.findViewById(R.id.home_fragment_refresh);
-        mRecyclerView = (RecyclerView)mView.findViewById(R.id.default_shot_content);
+        mRefreshLayout = (MaterialRefreshLayout)mView.findViewById(R.id.category_refresh);
+        mRecyclerView = (RecyclerView)mView.findViewById(R.id.category_recycle);
+        type = getArguments().getInt(Constant.TYPE);
+        this.category_url = buildCategoryUrl(type);
         initRefreshLayout();
         getData();
     }
@@ -99,9 +108,8 @@ public class HomeFragment extends Fragment {
         getData();
     }
 
-    //https://api.dribbble.com/v1/shots?page=2&per_page=1&access_token=bfca85ae4494581419c440a55187979b59affca89f581bc6fc9f07f6c3c71163
     private void getData() {
-        String url = API.url_shots + "?page=" + String.valueOf(page) + "&per_page=" + String.valueOf(per_page) + "&access_token=" + API.OAUTH_TOKEN;
+        String url = category_url + "?page=" + String.valueOf(page) + "&per_page=" + String.valueOf(per_page) + "&access_token=" + API.OAUTH_TOKEN;
         okHttpUtils.get(url, new BaseCallback<List<ShotItem>>() {
             @Override
             public void onBeforeRequest(Request request) {
@@ -152,5 +160,38 @@ public class HomeFragment extends Fragment {
                 mRecyclerView.scrollToPosition(adapter.getDatas().size());
                 mRefreshLayout.finishRefreshLoadMore();
         }
+    }
+
+    private String buildCategoryUrl(int type) {
+
+        String category_url = null;
+
+        switch (type) {
+            case Constant.POPULAR_TYPE:
+                category_url = API.url_shots + "?page=" + String.valueOf(page) + "&per_page=" + String.valueOf(per_page) + "&access_token=" + API.OAUTH_TOKEN;
+                break;
+            case Constant.RECENT_TYPE:
+                category_url = API.url_shots + "?sort=recent" + "&page=" + String.valueOf(page) + "&per_page=" + String.valueOf(per_page) + "&access_token=" + API.OAUTH_TOKEN;
+                break;
+            case Constant.ANIMATED_TYPE:
+                category_url = API.url_shots + "?list=animated" + "&page=" + String.valueOf(page) + "&per_page=" + String.valueOf(per_page) + "&access_token=" + API.OAUTH_TOKEN;
+                break;
+            case Constant.ATTACHMENTS_TYPE:
+                category_url = API.url_shots + "?list=attachments" + "&page=" + String.valueOf(page) + "&per_page=" + String.valueOf(per_page) + "&access_token=" + API.OAUTH_TOKEN;
+                break;
+            case Constant.DEBUTS_TYPE:
+                category_url = API.url_shots + "?list=debuts" + "&page=" + String.valueOf(page) + "&per_page=" + String.valueOf(per_page) + "&access_token=" + API.OAUTH_TOKEN;
+                break;
+            case Constant.PLAYOFFS_TYPE:
+                category_url = API.url_shots + "?list=playoffs" + "&page=" + String.valueOf(page) + "&per_page=" + String.valueOf(per_page) + "&access_token=" + API.OAUTH_TOKEN;
+                break;
+            case Constant.REBOUNDS_TYPE:
+                category_url = API.url_shots + "?list=rebounds" + "&page=" + String.valueOf(page) + "&per_page=" + String.valueOf(per_page) + "&access_token=" + API.OAUTH_TOKEN;
+                break;
+            case Constant.TEAMS_SUCCESS:
+                category_url = API.url_shots + "?list=teams" + "&page=" + String.valueOf(page) + "&per_page=" + String.valueOf(per_page) + "&access_token=" + API.OAUTH_TOKEN;
+                break;
+        }
+        return category_url;
     }
 }

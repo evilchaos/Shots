@@ -12,4 +12,15 @@
         <item name="android:windowIsTranslucent">false</item>
     </style>
 
+    <style name="CustomTabLayout" parent="Widget.Design.TabLayout">
+        <!--<item name="tabMaxWidth">@dimen/tab_max_width</item>-->
+        <item name="tabIndicatorColor">@android:color/white</item>
+
+        <!--<item name="tabTextAppearance">@style/CustomTabTextAppearance</item>-->
+        <item name="tabSelectedTextColor">@color/tab_indicator_color</item>
+    </style>
+    <style name="CustomTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
 </resources>
