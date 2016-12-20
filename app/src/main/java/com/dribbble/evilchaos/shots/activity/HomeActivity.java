@@ -13,6 +13,7 @@ import com.dribbble.evilchaos.shots.R;
 import com.dribbble.evilchaos.shots.entity.Tab;
 import com.dribbble.evilchaos.shots.fragment.CategoryFragment;
 import com.dribbble.evilchaos.shots.fragment.HomeFragment;
+import com.dribbble.evilchaos.shots.fragment.HomeShotFragment;
 import com.dribbble.evilchaos.shots.fragment.ProfileFragment;
 import com.dribbble.evilchaos.shots.fragment.SearchFragment;
 
@@ -34,13 +35,13 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initTab() {
-        Tab home_tab = new Tab(R.drawable.selector_icon_home,"home",HomeFragment.class);
-        Tab search_tab = new Tab(R.drawable.selector_icon_search,"search",SearchFragment.class);
+        Tab home_tab = new Tab(R.drawable.selector_icon_home,"home",HomeShotFragment.class);
+        //Tab search_tab = new Tab(R.drawable.selector_icon_search,"search",SearchFragment.class);
         Tab category_tab = new Tab(R.drawable.selector_icon_explore,"explore",CategoryFragment.class);
         Tab profile_tab = new Tab(R.drawable.selector_icon_person,"profile",ProfileFragment.class);
 
         mTabs.add(home_tab);
-        mTabs.add(search_tab);
+        //mTabs.add(search_tab);
         mTabs.add(category_tab);
         mTabs.add(profile_tab);
 

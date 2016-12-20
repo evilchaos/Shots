@@ -15,6 +15,7 @@
             android:layout_height="wrap_content"
             android:text="Shotsgram"
             android:textSize="20sp"
+            android:textColor="@android:color/white"
             android:layout_centerInParent="true"
             />
 
