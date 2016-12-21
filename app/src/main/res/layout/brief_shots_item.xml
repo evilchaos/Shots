@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView android:id="@+id/item_shots"
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_shots"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
@@ -43,7 +44,8 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:textColor="@android:color/black"
-                    android:textStyle="bold"
+                    fontPath= "fonts/YatraOne-Regular.ttf"
+                    tools:ignore="MissingPrefix"
                     tools:text="Evilchaos"/>
 
                 <TextView
@@ -52,8 +54,9 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/shots_title"
                     android:layout_gravity="center_vertical"
-                    android:textColor="@color/text_blue"
-                    android:textStyle="bold"
+                    android:textColor="#EA4C89"
+                    fontPath= "fonts/YatraOne-Regular.ttf"
+                    tools:ignore="MissingPrefix"
                     tools:text="Evilchaos for test"/>
 
                 <TextView
@@ -65,6 +68,8 @@
                     android:layout_marginLeft="8dp"
                     android:layout_toRightOf="@id/shots_user_name"
                     android:textColor="@color/text_grey"
+                    fontPath= "fonts/YatraOne-Regular.ttf"
+                    tools:ignore="MissingPrefix"
                     tools:text="20小时前"/>
             </RelativeLayout>
         </LinearLayout>
@@ -108,6 +113,8 @@
                 android:drawablePadding="2dp"
                 android:gravity="center"
                 android:textColor="@color/text_black"
+                fontPath= "fonts/YatraOne-Regular.ttf"
+                tools:ignore="MissingPrefix"
                 android:textSize="13sp"
                 tools:text="1234"/>
 
@@ -121,6 +128,8 @@
                 android:gravity="center"
                 android:textColor="@color/text_black"
                 android:textSize="13sp"
+                fontPath= "fonts/YatraOne-Regular.ttf"
+                tools:ignore="MissingPrefix"
                 tools:text="1234"/>
 
             <TextView
@@ -132,6 +141,8 @@
                 android:drawablePadding="2dp"
                 android:gravity="center"
                 android:textColor="@color/text_black"
+                fontPath= "fonts/YatraOne-Regular.ttf"
+                tools:ignore="MissingPrefix"
                 android:textSize="13sp"
                 tools:text="1234"/>
         </LinearLayout>

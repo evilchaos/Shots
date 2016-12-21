@@ -36,7 +36,7 @@ public abstract class BaseAdapter<T,H extends BaseViewHolder> extends RecyclerVi
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = mInflater.inflate(mLayoutResId,null,false);
+        View view = mInflater.inflate(mLayoutResId,parent,false);
         return new BaseViewHolder(view,mOnItemClickListener);
     }
 

@@ -133,7 +133,7 @@ public class HomeShotFragment extends Fragment {
                 adapter = new BriefAdapter(getContext(),shotItems);
                 mRecyclerView.setAdapter(adapter);
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL_LIST));
+                //mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL_LIST));
                 break;
 
             case STATE_REFREH:

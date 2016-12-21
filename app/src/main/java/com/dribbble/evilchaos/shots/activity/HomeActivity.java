@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
+import android.widget.TextView;
 
 import com.dribbble.evilchaos.shots.R;
 import com.dribbble.evilchaos.shots.entity.Tab;
@@ -20,7 +21,7 @@ import com.dribbble.evilchaos.shots.fragment.SearchFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends BaseActivity {
 
     private List<Tab> mTabs = new ArrayList<>(4);
     private LayoutInflater mInflater;
@@ -35,10 +36,10 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initTab() {
-        Tab home_tab = new Tab(R.drawable.selector_icon_home,"home",HomeShotFragment.class);
+        Tab home_tab = new Tab(R.drawable.selector_icon_home,"主页",HomeShotFragment.class);
         //Tab search_tab = new Tab(R.drawable.selector_icon_search,"search",SearchFragment.class);
-        Tab category_tab = new Tab(R.drawable.selector_icon_explore,"explore",CategoryFragment.class);
-        Tab profile_tab = new Tab(R.drawable.selector_icon_person,"profile",ProfileFragment.class);
+        Tab category_tab = new Tab(R.drawable.selector_icon_explore,"分类",CategoryFragment.class);
+        Tab profile_tab = new Tab(R.drawable.selector_icon_person,"用户",ProfileFragment.class);
 
         mTabs.add(home_tab);
         //mTabs.add(search_tab);
@@ -63,6 +64,9 @@ public class HomeActivity extends AppCompatActivity {
         View view = mInflater.inflate(R.layout.tab_indicator,null);
         ImageView imageView = (ImageView)view.findViewById(R.id.icon_tab);
         imageView.setBackgroundResource(tab.getIcon());
+
+        TextView textView = (TextView)view.findViewById(R.id.txt_indicator);
+        textView.setText(tab.getTag());
 
         return view;
     }

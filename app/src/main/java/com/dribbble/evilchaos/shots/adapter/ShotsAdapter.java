@@ -24,6 +24,8 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import uk.co.chrisjenx.calligraphy.CalligraphyTypefaceSpan;
+import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
 /**
  * Created by liujiachao on 2016/12/12.
