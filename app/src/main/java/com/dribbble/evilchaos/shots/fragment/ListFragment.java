@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.cjj.MaterialRefreshLayout;
 import com.cjj.MaterialRefreshListener;
 import com.dribbble.evilchaos.shots.R;
+import com.dribbble.evilchaos.shots.adapter.BriefAdapter;
 import com.dribbble.evilchaos.shots.adapter.ShotsAdapter;
 import com.dribbble.evilchaos.shots.entity.ShotItem;
 import com.dribbble.evilchaos.shots.http.BaseCallback;
@@ -42,7 +43,7 @@ public class ListFragment extends Fragment {
     private View mView;
     private RecyclerView mRecyclerView;
     private MaterialRefreshLayout mRefreshLayout;
-    private ShotsAdapter adapter;
+    private BriefAdapter adapter;
 
     private int page = 1;
     private int per_page = 30;
@@ -142,10 +143,10 @@ public class ListFragment extends Fragment {
     private void showData() {
         switch (state) {
             case STATE_NORMAL:
-                adapter = new ShotsAdapter(getContext(),shotItems);
+                adapter = new BriefAdapter(getContext(),shotItems);
                 mRecyclerView.setAdapter(adapter);
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL_LIST));
+                //mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL_LIST));
                 break;
 
             case STATE_REFREH:

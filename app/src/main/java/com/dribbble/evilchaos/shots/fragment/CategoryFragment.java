@@ -39,9 +39,6 @@ public class CategoryFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mCategoryTitle = (TextView)mView.findViewById(R.id.category_title);
-        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(),"fonts/Pacifico.ttf");
-        mCategoryTitle.setTypeface(typeface);
         setupViewPager();
     }
 

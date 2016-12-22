@@ -36,10 +36,10 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void initTab() {
-        Tab home_tab = new Tab(R.drawable.selector_icon_home,"主页",HomeShotFragment.class);
+        Tab home_tab = new Tab(R.drawable.selector_icon_home,"home",HomeShotFragment.class);
         //Tab search_tab = new Tab(R.drawable.selector_icon_search,"search",SearchFragment.class);
-        Tab category_tab = new Tab(R.drawable.selector_icon_explore,"分类",CategoryFragment.class);
-        Tab profile_tab = new Tab(R.drawable.selector_icon_person,"用户",ProfileFragment.class);
+        Tab category_tab = new Tab(R.drawable.selector_icon_explore,"explore",CategoryFragment.class);
+        Tab profile_tab = new Tab(R.drawable.selector_icon_person,"user",ProfileFragment.class);
 
         mTabs.add(home_tab);
         //mTabs.add(search_tab);
