@@ -11,4 +11,5 @@
     <color name="text_grey">#9DA0A3</color>
     <color name="text_blue">#5593bc</color>
     <color name="text_black">#737373</color>
+    <color name="divider">#ECECEC</color>
 </resources>
