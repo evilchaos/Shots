@@ -149,6 +149,7 @@
                 >
 
                 <com.dribbble.evilchaos.shots.widget.DrawableCenterTextView
+                    android:id = "@+id/detail_view_num"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -162,6 +163,7 @@
                     />
 
                 <com.dribbble.evilchaos.shots.widget.DrawableCenterTextView
+                    android:id = "@+id/detail_like_num"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -175,6 +177,7 @@
                     />
 
                 <com.dribbble.evilchaos.shots.widget.DrawableCenterTextView
+                    android:id = "@+id/detail_comm_num"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -203,9 +206,7 @@
                 android:text="placeHolder"
                 android:textSize="14sp"
                 android:autoLink="all"
-                fontPath= "fonts/YatraOne-Regular.ttf"
-                android:textColorLink="@color/colorAccent"
-                tools:ignore="MissingPrefix" />
+                android:textColorLink="@color/colorAccent" />
 
             <View
                 android:layout_width="match_parent"

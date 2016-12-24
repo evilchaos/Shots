@@ -1,10 +1,12 @@
 package com.dribbble.evilchaos.shots.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by liujiachao on 2016/12/12.
  */
 
-public class ShotItem {
+public class ShotItem implements Serializable{
     int id;
     String title;
     String description;

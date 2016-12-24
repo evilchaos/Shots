@@ -39,6 +39,5 @@ public class BriefAdapter extends SimpleAdapter<ShotItem> {
         viewHolder.getTextView(R.id.tv_item_shots_like).setText(String.valueOf(shotItem.getLikes_count()));
         viewHolder.getTextView(R.id.tv_item_shots_comment).setText(String.valueOf(shotItem.getComments_count()));
         viewHolder.getTextView(R.id.tv_item_shots_view).setText(String.valueOf(shotItem.getViews_count()));
-
     }
 }
