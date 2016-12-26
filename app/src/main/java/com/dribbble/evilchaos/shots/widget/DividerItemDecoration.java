@@ -9,6 +9,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.dribbble.evilchaos.shots.app.MyApplication;
+import com.dribbble.evilchaos.shots.util.DisplayUtils;
+
 /**
  * Created by liujiachao on 2016/12/14.
  */
@@ -51,7 +54,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration{
     }
 
     public void drawVertical(Canvas c, RecyclerView parent) {
-        final int left = parent.getPaddingLeft();
+        final int left = parent.getPaddingLeft() + DisplayUtils.dip2px(MyApplication.mApplicationContext,55);
         final int right = parent.getWidth() - parent.getPaddingRight();
 
         final int childCount = parent.getChildCount();

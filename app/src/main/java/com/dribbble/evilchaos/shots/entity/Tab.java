@@ -1,10 +1,12 @@
 package com.dribbble.evilchaos.shots.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by liujiachao on 2016/12/7.
  */
 
-public class Tab {
+public class Tab implements Serializable{
     private int icon;
     private String tag;
     private Class fragment;

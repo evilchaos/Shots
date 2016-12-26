@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="5dp"
+    android:padding="10dp"
+    android:orientation="horizontal"
     >
 
     <com.facebook.drawee.view.SimpleDraweeView
@@ -15,54 +16,67 @@
         fresco:roundAsCircle = "true"
          />
 
-    <TextView
-        android:id = "@+id/commenter_name"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="placeholder"
-        android:layout_toRightOf="@+id/comment_author_avatar"
-        fontPath= "fonts/YatraOne-Regular.ttf"
-        tools:ignore="MissingPrefix"
-        />
+        android:layout_marginLeft="10dp"
+        android:orientation="vertical"
+        >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/comment_author_avatar"
-        android:layout_alignBottom="@+id/comment_author_avatar"
-        android:id = "@+id/comment_content"
-        android:text="placeholder"
-        fontPath= "fonts/YatraOne-Regular.ttf"
-        tools:ignore="MissingPrefix"
-        />
+        <TextView
+            android:id = "@+id/commenter_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="placeholder"
+            android:textColor="@android:color/black"
+            fontPath= "fonts/YatraOne-Regular.ttf"
+            tools:ignore="MissingPrefix"
+            android:layout_marginBottom="6dp"
+            />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id = "@+id/comment_content"
+            android:text="placeholder"
+            fontPath= "fonts/YatraOne-Regular.ttf"
+            tools:ignore="MissingPrefix"
+            android:layout_marginBottom="6dp"
+            />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id = "@+id/comment_time"
-        android:layout_toRightOf="@+id/comment_author_avatar"
-        android:layout_alignParentBottom="true"
-        android:text="2天前"
-        android:textSize="12sp"
-        fontPath= "fonts/YatraOne-Regular.ttf"
-        tools:ignore="MissingPrefix"
-        android:layout_alignTop="@+id/comment_like_number" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            >
 
-    <TextView
-        android:id = "@+id/comment_like_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:drawablePadding="2dp"
-        android:textSize="12sp"
-        android:drawableLeft="@drawable/select_like_10dp"
-        android:gravity="center_vertical"
-        />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id = "@+id/comment_time"
+                android:text="2天前"
+                android:textSize="14sp"
+                fontPath= "fonts/YatraOne-Regular.ttf"
+                tools:ignore="MissingPrefix"
+                />
 
 
+            <TextView
+                android:id = "@+id/comment_like_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:layout_alignParentRight="true"
+                android:drawablePadding="5dp"
+                android:textSize="14sp"
+                android:drawableLeft="@drawable/select_like_10dp"
+                android:gravity="center_vertical"
+                fontPath= "fonts/YatraOne-Regular.ttf"
+                tools:ignore="MissingPrefix"
+                />
 
+        </RelativeLayout>
 
-</RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

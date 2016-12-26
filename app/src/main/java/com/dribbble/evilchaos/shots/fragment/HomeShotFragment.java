@@ -1,5 +1,6 @@
 package com.dribbble.evilchaos.shots.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 import com.cjj.MaterialRefreshLayout;
 import com.cjj.MaterialRefreshListener;
 import com.dribbble.evilchaos.shots.R;
+import com.dribbble.evilchaos.shots.activity.ShotsDetailActivity;
+import com.dribbble.evilchaos.shots.adapter.BaseAdapter;
 import com.dribbble.evilchaos.shots.adapter.BriefAdapter;
 import com.dribbble.evilchaos.shots.adapter.ShotsAdapter;
 import com.dribbble.evilchaos.shots.entity.ShotItem;
@@ -134,6 +137,16 @@ public class HomeShotFragment extends Fragment {
                 mRecyclerView.setAdapter(adapter);
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 //mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL_LIST));
+                adapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener(){
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(getContext(),ShotsDetailActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("shots_data",shotItems.get(position));
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }
+                });
                 break;
 
             case STATE_REFREH:
