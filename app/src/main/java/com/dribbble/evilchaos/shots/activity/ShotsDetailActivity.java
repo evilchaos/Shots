@@ -11,6 +11,8 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
+import android.text.style.URLSpan;
+import android.text.util.Linkify;
 import android.view.View;
 import android.widget.TextView;
 
@@ -24,6 +26,7 @@ import com.dribbble.evilchaos.shots.util.API;
 import com.dribbble.evilchaos.shots.util.TimeUtils;
 import com.dribbble.evilchaos.shots.widget.DividerItemDecoration;
 import com.dribbble.evilchaos.shots.widget.DrawableCenterTextView;
+import com.dribbble.evilchaos.shots.widget.MyLinearLayoutManager;
 import com.dribbble.evilchaos.shots.widget.NoUnderlineSpan;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
@@ -108,33 +111,21 @@ public class ShotsDetailActivity extends BaseActivity {
         }
 
         expTextView.setText(String.valueOf(shotItem.getViews_count()));
-        expTextView.setText(String.valueOf(shotItem.getLikes_count()));
-        expTextView.setText(String.valueOf(shotItem.getComments_count()));
+        likeTextView.setText(String.valueOf(shotItem.getLikes_count()));
+        commTextView.setText(String.valueOf(shotItem.getComments_count()));
 
         //处理description
         String html = shotItem.getDescription();
+
         if (html != null) {
-            String originText = Html.fromHtml(html).toString().trim();
-            SpannableString msp = new SpannableString(originText);
-
-
-            NoUnderlineSpan noUnderlineSpan = new NoUnderlineSpan();
-            CalligraphyTypefaceSpan typefaceSpan = new CalligraphyTypefaceSpan(TypefaceUtils.load(getAssets(), "fonts/YatraOne-Regular.ttf"));
-
-            msp.setSpan(noUnderlineSpan,0,msp.length(), Spanned.SPAN_MARK_MARK);
-            //msp.setSpan(typefaceSpan,0,msp.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-            desTextView.setMovementMethod(ScrollingMovementMethod.getInstance());
-            desTextView.setMovementMethod(LinkMovementMethod.getInstance());
-            desTextView.setText(msp);
+            setDescriptionLinks(desTextView,html);
+            removeHyperLinkUnderline(desTextView);
         } else {
             desTextView.setText("(No Description)");
-            //setCustomFonts(desTextView);
         }
 
         //评论
-        getComments();
-
+         getComments();
     }
 
     private void getComments() {
@@ -172,9 +163,28 @@ public class ShotsDetailActivity extends BaseActivity {
 
     private void showComment() {
         commentAdapter = new CommentAdapter(this,commentItemList);
+//        LinearLayoutManager layoutManager=new LinearLayoutManager(this);
+//        layoutManager.setAutoMeasureEnabled(true);
+//        commRecyclerView.setLayoutManager(layoutManager);
         commRecyclerView.setAdapter(commentAdapter);
-        commRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        commRecyclerView.setLayoutManager(new MyLinearLayoutManager(this));
         commRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL_LIST));
+        commRecyclerView.setNestedScrollingEnabled(false);
+        commRecyclerView.setHasFixedSize(false);
+    }
+
+    private void setDescriptionLinks(TextView desTextView,String str) {
+        Spanned text = Html.fromHtml(str);
+        URLSpan[] currentSpans = text.getSpans(0, text.length(), URLSpan.class);
+        SpannableString buffer = new SpannableString(text);
+        Linkify.addLinks(buffer, Linkify.ALL);
+        for (URLSpan span : currentSpans) {
+            int end = text.getSpanEnd(span);
+            int start = text.getSpanStart(span);
+            buffer.setSpan(span, start, end, 0);
+        }
+        desTextView.setText(buffer);
+        desTextView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     private void removeHyperLinkUnderline(TextView tvDes) {
@@ -183,17 +193,6 @@ public class ShotsDetailActivity extends BaseActivity {
             Spannable spannable = (Spannable)tvDes.getText();
             NoUnderlineSpan noUnderlineSpan = new NoUnderlineSpan();
             spannable.setSpan(noUnderlineSpan,0,text.length(), Spanned.SPAN_MARK_MARK);
-        }
-    }
-
-    private void setCustomFonts(TextView desTextView) {
-        CalligraphyTypefaceSpan typefaceSpan = new CalligraphyTypefaceSpan(TypefaceUtils.load(getAssets(), "fonts/YatraOne-Regular.ttf"));
-        CharSequence text = desTextView.getText();
-
-        if (text instanceof Spannable) {
-            SpannableString sBuilder = new SpannableString(text);
-            desTextView.setText(sBuilder);
-            sBuilder.setSpan(typefaceSpan,0,sBuilder.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
     }
 

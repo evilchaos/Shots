@@ -62,6 +62,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         >
 
         <LinearLayout
@@ -206,8 +207,11 @@
                 android:padding="10dp"
                 android:text="placeHolder"
                 android:textSize="14sp"
-                android:autoLink="all"
-                android:textColorLink="@color/colorAccent" />
+                android:linksClickable="true"
+                fontPath= "fonts/YatraOne-Regular.ttf"
+                tools:ignore="MissingPrefix"
+                android:textColorLink="@color/colorAccent"
+                 />
 
             <View
                 android:layout_width="match_parent"
@@ -216,7 +220,6 @@
                 />
 
             <android.support.v7.widget.RecyclerView
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id = "@+id/rv_comment"
