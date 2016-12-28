@@ -39,9 +39,11 @@
             android:layout_height="wrap_content"
             android:id = "@+id/comment_content"
             android:text="placeholder"
+            android:layout_marginBottom="6dp"
+            android:linksClickable="true"
             fontPath= "fonts/YatraOne-Regular.ttf"
             tools:ignore="MissingPrefix"
-            android:layout_marginBottom="6dp"
+            android:textColorLink="@color/colorAccent"
             />
 
         <RelativeLayout
