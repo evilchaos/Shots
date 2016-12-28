@@ -58,11 +58,9 @@
 
     </RelativeLayout>
 
-    <android.support.v4.widget.NestedScrollView
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
         >
 
         <LinearLayout
@@ -219,14 +217,16 @@
                 android:background="@color/divider"
                 />
 
-            <android.support.v7.widget.RecyclerView
+            <android.support.v4.widget.NestedListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:id = "@+id/rv_comment"
                 />
+
         </LinearLayout>
 
 
-    </android.support.v4.widget.NestedScrollView>
+    </ScrollView>
 
 </LinearLayout>

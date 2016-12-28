@@ -14,9 +14,14 @@ import android.text.method.ScrollingMovementMethod;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.dribbble.evilchaos.shots.R;
+import com.dribbble.evilchaos.shots.adapter.CommListAdapter;
 import com.dribbble.evilchaos.shots.adapter.CommentAdapter;
 import com.dribbble.evilchaos.shots.entity.CommentItem;
 import com.dribbble.evilchaos.shots.entity.ShotItem;
@@ -24,9 +29,12 @@ import com.dribbble.evilchaos.shots.http.BaseCallback;
 import com.dribbble.evilchaos.shots.http.OkHttpUtils;
 import com.dribbble.evilchaos.shots.util.API;
 import com.dribbble.evilchaos.shots.util.TimeUtils;
+import com.dribbble.evilchaos.shots.widget.AdaptableLinearLayout;
 import com.dribbble.evilchaos.shots.widget.DividerItemDecoration;
 import com.dribbble.evilchaos.shots.widget.DrawableCenterTextView;
 import com.dribbble.evilchaos.shots.widget.MyLinearLayoutManager;
+import com.dribbble.evilchaos.shots.widget.MyListView;
+import com.dribbble.evilchaos.shots.widget.NestedListView;
 import com.dribbble.evilchaos.shots.widget.NoUnderlineSpan;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
@@ -58,10 +66,12 @@ public class ShotsDetailActivity extends BaseActivity {
     DrawableCenterTextView likeTextView;
     DrawableCenterTextView commTextView;
     TextView desTextView;
-    RecyclerView commRecyclerView;
+    //RecyclerView commRecyclerView;
+    NestedListView commListView;
 
     List<CommentItem> commentItemList = new ArrayList<>();
-    CommentAdapter commentAdapter;
+    //CommentAdapter commentAdapter;
+    CommListAdapter commListAdapter;
 
 
     @Override
@@ -85,7 +95,7 @@ public class ShotsDetailActivity extends BaseActivity {
         commTextView = (DrawableCenterTextView)findViewById(R.id.detail_comm_num);
 
         desTextView = (TextView)findViewById(R.id.detail_description);
-        commRecyclerView = (RecyclerView)findViewById(R.id.rv_comment);
+        commListView = (NestedListView) findViewById(R.id.rv_comment);
 
         fillShotsInfo();
 
@@ -129,7 +139,8 @@ public class ShotsDetailActivity extends BaseActivity {
     }
 
     private void getComments() {
-        String url = shotItem.getComments_url() + "?access_token=" + API.OAUTH_TOKEN;
+        int comm_num = shotItem.getComments_count();
+        String url = shotItem.getComments_url() +"?per_page=" + String.valueOf(comm_num) +  "&access_token=" + API.OAUTH_TOKEN;
 
         okHttpUtils.get(url,new BaseCallback<List<CommentItem>>() {
             @Override
@@ -162,15 +173,16 @@ public class ShotsDetailActivity extends BaseActivity {
     }
 
     private void showComment() {
-        commentAdapter = new CommentAdapter(this,commentItemList);
+        commListAdapter = new CommListAdapter(this,commentItemList);
 //        LinearLayoutManager layoutManager=new LinearLayoutManager(this);
 //        layoutManager.setAutoMeasureEnabled(true);
 //        commRecyclerView.setLayoutManager(layoutManager);
-        commRecyclerView.setAdapter(commentAdapter);
-        commRecyclerView.setLayoutManager(new MyLinearLayoutManager(this));
-        commRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL_LIST));
-        commRecyclerView.setNestedScrollingEnabled(false);
-        commRecyclerView.setHasFixedSize(false);
+        commListView.setAdapter(commListAdapter);
+        //setListViewHeightBasedOnChildren(commListView);
+        //commRecyclerView.setLayoutManager(new MyLinearLayoutManager(this));
+        //commRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL_LIST));
+        //commRecyclerView.setNestedScrollingEnabled(false);
+        //commRecyclerView.setHasFixedSize(false);
     }
 
     private void setDescriptionLinks(TextView desTextView,String str) {
@@ -195,5 +207,24 @@ public class ShotsDetailActivity extends BaseActivity {
             spannable.setSpan(noUnderlineSpan,0,text.length(), Spanned.SPAN_MARK_MARK);
         }
     }
+
+    private   void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            // pre-condition
+            return;
+        }
+        int totalHeight = 0;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+    }
+
 
 }
