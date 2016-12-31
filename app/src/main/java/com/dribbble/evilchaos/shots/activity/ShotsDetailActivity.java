@@ -66,12 +66,12 @@ public class ShotsDetailActivity extends BaseActivity {
     DrawableCenterTextView likeTextView;
     DrawableCenterTextView commTextView;
     TextView desTextView;
-    //RecyclerView commRecyclerView;
-    NestedListView commListView;
+    RecyclerView commRecyclerView;
+    //NestedListView commListView;
 
     List<CommentItem> commentItemList = new ArrayList<>();
-    //CommentAdapter commentAdapter;
-    CommListAdapter commListAdapter;
+    CommentAdapter commentAdapter;
+    //CommListAdapter commListAdapter;
 
 
     @Override
@@ -95,7 +95,7 @@ public class ShotsDetailActivity extends BaseActivity {
         commTextView = (DrawableCenterTextView)findViewById(R.id.detail_comm_num);
 
         desTextView = (TextView)findViewById(R.id.detail_description);
-        commListView = (NestedListView) findViewById(R.id.rv_comment);
+        commRecyclerView = (RecyclerView) findViewById(R.id.rv_comment);
 
         fillShotsInfo();
 
@@ -173,16 +173,11 @@ public class ShotsDetailActivity extends BaseActivity {
     }
 
     private void showComment() {
-        commListAdapter = new CommListAdapter(this,commentItemList);
-//        LinearLayoutManager layoutManager=new LinearLayoutManager(this);
-//        layoutManager.setAutoMeasureEnabled(true);
-//        commRecyclerView.setLayoutManager(layoutManager);
-        commListView.setAdapter(commListAdapter);
-        //setListViewHeightBasedOnChildren(commListView);
-        //commRecyclerView.setLayoutManager(new MyLinearLayoutManager(this));
-        //commRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL_LIST));
-        //commRecyclerView.setNestedScrollingEnabled(false);
-        //commRecyclerView.setHasFixedSize(false);
+        commentAdapter = new CommentAdapter(this,commentItemList);
+        commRecyclerView.setAdapter(commentAdapter);
+        commRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        commRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL_LIST));
+        commRecyclerView.setNestedScrollingEnabled(false);
     }
 
     private void setDescriptionLinks(TextView desTextView,String str) {
@@ -207,24 +202,5 @@ public class ShotsDetailActivity extends BaseActivity {
             spannable.setSpan(noUnderlineSpan,0,text.length(), Spanned.SPAN_MARK_MARK);
         }
     }
-
-    private   void setListViewHeightBasedOnChildren(ListView listView) {
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null) {
-            // pre-condition
-            return;
-        }
-        int totalHeight = 0;
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            View listItem = listAdapter.getView(i, null, listView);
-            listItem.measure(0, 0);
-            totalHeight += listItem.getMeasuredHeight();
-        }
-
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
-    }
-
 
 }
