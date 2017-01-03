@@ -7,15 +7,25 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
+import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.dribbble.evilchaos.shots.R;
+import com.dribbble.evilchaos.shots.entity.AccessToken;
+import com.dribbble.evilchaos.shots.entity.User;
+import com.dribbble.evilchaos.shots.http.BaseCallback;
+import com.dribbble.evilchaos.shots.http.OkHttpUtils;
 import com.dribbble.evilchaos.shots.util.API;
+import com.dribbble.evilchaos.shots.util.UserLocalData;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by liujiachao on 2016/12/30.
@@ -23,11 +33,11 @@ import com.dribbble.evilchaos.shots.util.API;
 
 public class LoginActivity extends BaseActivity {
 
-    public static final String DRIBBBLE_SHARE = "dri_share";
-
+    private OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
     private ImageButton closeLoginBtn;
     private WebView loginPage ;
-    private SharedPreferences mDribbbleShare;
+
+    private AccessToken mAccessToken;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,8 +63,8 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void loadLoginWeb() {
-        mDribbbleShare = getSharedPreferences(DRIBBBLE_SHARE, Context.MODE_PRIVATE);
-        String accessToken = mDribbbleShare.getString(DRIBBBLE_SHARE,null);
+
+        String accessToken = UserLocalData.getToken(LoginActivity.this);
 
         if (TextUtils.isEmpty(accessToken)) {
             loginPage.setWebViewClient(new WebViewClient(){
@@ -68,7 +78,7 @@ public class LoginActivity extends BaseActivity {
                         }
 
                         if (!TextUtils.isEmpty(returnCode)) {
-                            requestAccessToken();
+                            requestAccessToken(returnCode);
                         } else {
                             Toast.makeText(LoginActivity.this,"Please try again",Toast.LENGTH_SHORT).show();
                         }
@@ -88,11 +98,83 @@ public class LoginActivity extends BaseActivity {
 
     }
 
-    private void fetchUserInfo() {
+    private void requestAccessToken(String returnCode) {
+        Map<String,String> mAuthMap = new HashMap<>();
+        mAuthMap.put("client_id",API.CLIENT_ID);
+        mAuthMap.put("client_secret",API.CLIENT_SECRET);
+        mAuthMap.put("code",returnCode);
+        mAuthMap.put("state",API.mState);
+        okHttpUtils.post(API.dribbble_token_url,mAuthMap,new BaseCallback<AccessToken>() {
+            @Override
+            public void onBeforeRequest(Request request) {
+
+            }
+
+            @Override
+            public void onResponse(Response response) {
+
+            }
+
+            @Override
+            public void onFailure(Request request, Exception e) {
+
+            }
+
+            @Override
+            public void onSuccess(Response response, AccessToken accessToken) {
+                mAccessToken = accessToken;
+                UserLocalData.putToken(LoginActivity.this,mAccessToken.getAccess_token());
+
+                Toast.makeText(LoginActivity.this,"Authorization success",Toast.LENGTH_SHORT).show();
+                CookieManager.getInstance().removeAllCookie();
+
+                fetchUserInfo();
+            }
+
+            @Override
+            public void OnError(Response response, int code, Exception e) {
+                Toast.makeText(LoginActivity.this, "Please try again", Toast.LENGTH_SHORT).show();
+            }
+        } );
+
     }
 
-    private void requestAccessToken() {
+    private void fetchUserInfo() {
+        String accessToken = UserLocalData.getToken(LoginActivity.this);
+        String url = API.dribbble_user_info + "?access_token=" + accessToken;
 
+        okHttpUtils.get(url,new BaseCallback<User>() {
+            @Override
+            public void onBeforeRequest(Request request) {
+
+            }
+
+            @Override
+            public void onResponse(Response response) {
+
+            }
+
+            @Override
+            public void onFailure(Request request, Exception e) {
+
+            }
+
+            @Override
+            public void onSuccess(Response response, User user) {
+                saveUserInfo(user);
+            }
+
+            @Override
+            public void OnError(Response response, int code, Exception e) {
+
+            }
+        });
+
+
+    }
+
+    private void saveUserInfo(User user) {
+        UserLocalData.putUser(LoginActivity.this,user);
     }
 
     private String getCodeFromUrl(String url) {
