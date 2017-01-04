@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:id = "@+id/user_toolbar"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        >
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id = "@+id/user_img"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginRight="5dp"
+            fresco:roundAsCircle = "true"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id = "@+id/user_name"
+            android:textColor="@android:color/black"
+            fontPath= "fonts/YatraOne-Regular.ttf"
+            tools:ignore="MissingPrefix"
+            android:text="evilchaos"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/user_img"
+            android:layout_toEndOf="@+id/user_img" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5sp"
+            android:background="@color/text_black"
+            android:layout_marginTop="5dp"
+            android:layout_alignLeft="@+id/user_name"
+            android:layout_below="@+id/user_name"
+            android:id = "@+id/divider_line"
+            />
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:id = "@+id/user_followers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignLeft="@+id/user_name"
+            android:layout_below="@+id/divider_line"
+
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id ="@+id/user_followers_num"
+                android:text="9"
+                android:textSize="12sp"
+                android:textColor="@android:color/black"
+                fontPath= "fonts/YatraOne-Regular.ttf"
+                tools:ignore="MissingPrefix"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="followers"
+                android:textSize="10sp"
+                fontPath= "fonts/YatraOne-Regular.ttf"
+                tools:ignore="MissingPrefix"
+                />
+
+        </LinearLayout>
+
+
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>
