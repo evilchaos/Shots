@@ -7,18 +7,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        android:id = "@+id/user_toolbar"
-        />
+        android:layout_height="45dp"
+        android:background="@color/bottomColor"
+        >
+
+
+
+
+        <TextView
+            android:id = "@+id/app_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Shotsgram"
+            android:textSize="22sp"
+            android:textColor="@android:color/white"
+            android:layout_centerInParent="true"
+            fontPath= "fonts/YatraOne-Regular.ttf"
+            tools:ignore="MissingPrefix"
+            />
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
+        android:paddingTop="7dp"
+        android:paddingBottom="7dp"
         >
 
         <com.facebook.drawee.view.SimpleDraweeView
@@ -44,7 +61,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5sp"
-            android:background="@color/text_black"
+            android:background="@color/divider"
             android:layout_marginTop="5dp"
             android:layout_alignLeft="@+id/user_name"
             android:layout_below="@+id/user_name"
@@ -59,6 +76,7 @@
             android:orientation="vertical"
             android:layout_alignLeft="@+id/user_name"
             android:layout_below="@+id/divider_line"
+            android:layout_marginRight="30dp"
 
             >
             <TextView
@@ -66,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:id ="@+id/user_followers_num"
                 android:text="9"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:textColor="@android:color/black"
                 fontPath= "fonts/YatraOne-Regular.ttf"
                 tools:ignore="MissingPrefix"
@@ -76,17 +94,149 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="followers"
-                android:textSize="10sp"
+                android:textSize="8sp"
                 fontPath= "fonts/YatraOne-Regular.ttf"
                 tools:ignore="MissingPrefix"
                 />
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:id = "@+id/user_followings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_toRightOf="@+id/user_followers"
+            android:layout_below="@+id/divider_line"
 
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id ="@+id/user_followings_num"
+                android:text="9"
+                android:textSize="10sp"
+                android:textColor="@android:color/black"
+                fontPath= "fonts/YatraOne-Regular.ttf"
+                tools:ignore="MissingPrefix"
+                />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="followings"
+                android:textSize="8sp"
+                fontPath= "fonts/YatraOne-Regular.ttf"
+                tools:ignore="MissingPrefix"
+                />
+
+        </LinearLayout>
 
     </RelativeLayout>
+
+    <TextView
+        android:id = "@+id/location"
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Beijing China"
+        android:drawableLeft="@drawable/ic_location_black_16dp"
+        android:textSize="12sp"
+        fontPath= "fonts/YatraOne-Regular.ttf"
+        tools:ignore="MissingPrefix"
+        android:drawablePadding="2dp"
+        />
+
+    <View
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="0.5sp"
+        android:background="@color/divider"
+        android:layout_marginTop="5dp"
+        />
+
+    <TextView
+        android:paddingLeft="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="200"
+        android:textColor="@android:color/black"
+        android:drawableLeft="@drawable/iv_like_grey_10dp"
+        android:textSize="10sp"
+        fontPath= "fonts/YatraOne-Regular.ttf"
+        tools:ignore="MissingPrefix"
+        android:gravity="center_vertical"
+        android:drawablePadding="2dp"
+        android:id="@+id/user_likes_num" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5sp"
+        android:background="@color/divider"
+        android:layout_marginTop="5dp"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5sp"
+        android:background="@color/divider"
+        android:layout_marginTop="20dp"
+        />
+
+    <com.dribbble.evilchaos.shots.widget.AppleItemView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id = "@+id/app_shots"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5sp"
+        android:background="@color/divider"
+        />
+    <com.dribbble.evilchaos.shots.widget.AppleItemView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id = "@+id/app_likes"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5sp"
+        android:background="@color/divider"
+        />
+    <com.dribbble.evilchaos.shots.widget.AppleItemView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id = "@+id/app_projects"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5sp"
+        android:background="@color/divider"
+        />
+    <com.dribbble.evilchaos.shots.widget.AppleItemView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id = "@+id/app_buckets"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5sp"
+        android:background="@color/divider"
+        />
+    <com.dribbble.evilchaos.shots.widget.AppleItemView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id = "@+id/app_Teams"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5sp"
+        android:background="@color/divider"
+        />
+
+
 
 
 </LinearLayout>
