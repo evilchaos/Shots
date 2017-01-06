@@ -22,7 +22,7 @@ public class API {
     public static final String url_buckets = "https://api.dribbble.com/v1/buckets";
     public static final String url_projects = "https://api.dribbble.com/v1/projects";
     public static final String url_search = "https://dribbble.com/search/";
-    public static final String dribbble_call_back = "http://api.lovejade.com:80";
+    public static final String dribbble_call_back = "https://www.baidu.com:443";
     public static final String dribbble_auth_base = "https://dribbble.com/oauth/authorize";
 
     public static String mState = "evilchaos";

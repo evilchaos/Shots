@@ -12,9 +12,17 @@ import android.widget.TextView;
 
 import com.dribbble.evilchaos.shots.R;
 import com.dribbble.evilchaos.shots.activity.LoginActivity;
-import com.dribbble.evilchaos.shots.util.PreferencesUtils;
+import com.dribbble.evilchaos.shots.entity.User;
+import com.dribbble.evilchaos.shots.http.BaseCallback;
+import com.dribbble.evilchaos.shots.http.OkHttpUtils;
+import com.dribbble.evilchaos.shots.util.API;
 import com.dribbble.evilchaos.shots.util.UserLocalData;
 import com.dribbble.evilchaos.shots.widget.AppleItemView;
+import com.facebook.drawee.view.SimpleDraweeView;
+
+import okhttp3.Request;
+import okhttp3.Response;
+
 
 /**
  * Created by liujiachao on 2016/12/7.
@@ -23,10 +31,12 @@ import com.dribbble.evilchaos.shots.widget.AppleItemView;
 public class ProfileFragment extends Fragment {
 
     public static final int REQUEST_CODE = 1;
+    public OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
 
     private Context mContext;
     private View mView;
     private TextView mUserTitle;
+    private SimpleDraweeView mDraweeView;
     private TextView mUserName;
     private TextView mFollowerNum;
     private TextView mFollowingNum;
@@ -55,6 +65,7 @@ public class ProfileFragment extends Fragment {
     private void initViews() {
         mContext = getContext();
         mUserTitle = (TextView)mView.findViewById(R.id.app_user_name);
+        mDraweeView = (SimpleDraweeView)mView.findViewById(R.id.user_img);
         mUserName = (TextView)mView.findViewById(R.id.user_name);
         mFollowerNum = (TextView)mView.findViewById(R.id.user_followers_num);
         mFollowingNum = (TextView)mView.findViewById(R.id.user_followings_num);
@@ -81,6 +92,65 @@ public class ProfileFragment extends Fragment {
     }
 
     private void getData(String accessToken) {
+        String url = API.dribbble_user_info + "?access_token=" + accessToken;
+        okHttpUtils.get(url,new BaseCallback<User>() {
+            @Override
+            public void onBeforeRequest(Request request) {
+
+            }
+
+            @Override
+            public void onResponse(Response response) {
+
+            }
+
+            @Override
+            public void onFailure(Request request, Exception e) {
+
+            }
+
+            @Override
+            public void onSuccess(Response response, User user) {
+                saveUserInfo(user);
+                showUserInfo(user);
+            }
+
+            @Override
+            public void OnError(Response response, int code, Exception e) {
+
+            }
+        });
+
+    }
+
+    private void saveUserInfo(User user) {
+        UserLocalData.putUser(mContext,user);
+    }
+
+    private void showUserInfo(User user) {
+        mUserTitle.setText(user.getUsername());
+        mDraweeView.setImageURI(user.getAvatar_url());
+        mUserName.setText(user.getUsername());
+        mFollowerNum.setText(String.valueOf(user.getFollowers_count()));
+        mFollowingNum.setText(String.valueOf(user.getFollowings_count()));
+
+        if (mLocation == null) {
+            mFollowingNum.setVisibility(View.GONE);
+        } else {
+            mLocation.setText(user.getLocation());
+        }
+
+        mLikesNum.setText(String.valueOf(user.getLikes_received_count()));
+        mAppShots.setItemNum(String.valueOf(user.getShots_count()));
+        mAppShots.setTitleText("shot");
+        mAppLikes.setItemNum(String.valueOf(user.getLikes_count()));
+        mAppLikes.setTitleText("like");
+        mAppProjects.setItemNum(String.valueOf(user.getProjects_count()));
+        mAppProjects.setTitleText("project");
+        mAppBuckets.setItemNum(String.valueOf(user.getBuckets_count()));
+        mAppBuckets.setTitleText("bucket");
+        mAppTeams.setItemNum(String.valueOf(user.getTeams_count()));
+        mAppTeams.setTitleText("team");
 
     }
 
@@ -91,6 +161,9 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //得到新Activity关闭后返回的数据
-
+        User user = UserLocalData.getUser(mContext);
+        if (user != null) {
+            showUserInfo(user);
+        }
     }
 }
