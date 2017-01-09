@@ -18,7 +18,7 @@ public class AppleItemView extends FrameLayout{
     private TextView itemTitle;
     private TextView itemNum;
 
-    private OnClickActionListener mOnClickActionListener = null;
+    //private OnClickActionListener mOnClickActionListener = null;
 
     public AppleItemView(Context context, AttributeSet attrs) {
         super(context,attrs);
@@ -49,11 +49,11 @@ public class AppleItemView extends FrameLayout{
         itemNum.setText(text);
     }
 
-    public void setOnClickActionListener(OnClickActionListener mOnClickActionListener) {
-        this.mOnClickActionListener = mOnClickActionListener;
-    }
-
-    public interface OnClickActionListener {
-        public void OnClickAction();
-    }
+//    public void setOnClickActionListener(OnClickActionListener mOnClickActionListener) {
+//        this.mOnClickActionListener = mOnClickActionListener;
+//    }
+//
+//    public interface OnClickActionListener {
+//        public void OnClickAction();
+//    }
 }

@@ -28,7 +28,7 @@ import okhttp3.Response;
  * Created by liujiachao on 2016/12/7.
  */
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     public static final int REQUEST_CODE = 1;
     public OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
@@ -152,6 +152,12 @@ public class ProfileFragment extends Fragment {
         mAppTeams.setItemNum(String.valueOf(user.getTeams_count()));
         mAppTeams.setTitleText("team");
 
+        mAppShots.setOnClickListener(this);
+        mAppLikes.setOnClickListener(this);
+        mAppProjects.setOnClickListener(this);
+        mAppBuckets.setOnClickListener(this);
+        mAppTeams.setOnClickListener(this);
+
     }
 
     private String getAccessToken() {
@@ -164,6 +170,28 @@ public class ProfileFragment extends Fragment {
         User user = UserLocalData.getUser(mContext);
         if (user != null) {
             showUserInfo(user);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            case R.id.app_shots:
+
+                break;
+            case R.id.app_likes:
+                //传tag
+                break;
+            case R.id.app_projects:
+                break;
+            case R.id.app_buckets:
+                break;
+            case R.id.app_Teams:
+                break;
+
+            default:
+                break;
         }
     }
 }
