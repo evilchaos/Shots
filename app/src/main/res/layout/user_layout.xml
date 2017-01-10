@@ -220,6 +220,7 @@
         android:layout_height="wrap_content"
         android:id = "@+id/app_projects"
         shots:itemTag = "project"
+        android:clickable="false"
         />
     <View
         android:layout_width="match_parent"
@@ -242,6 +243,7 @@
         android:layout_height="wrap_content"
         android:id = "@+id/app_Teams"
         shots:itemTag ="team"
+        android:clickable="false"
         />
     <View
         android:layout_width="match_parent"
