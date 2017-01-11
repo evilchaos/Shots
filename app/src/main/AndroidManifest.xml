@@ -19,6 +19,8 @@
 
         <activity android:name=".activity.ShotsDetailActivity"/>
         <activity android:name=".activity.LoginActivity"/>
+        <activity android:name=".activity.UserLikesActivity"/>
+        <activity android:name=".activity.UserShotsActivity"/>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET"/>

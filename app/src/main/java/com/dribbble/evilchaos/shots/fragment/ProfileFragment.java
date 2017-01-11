@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.dribbble.evilchaos.shots.R;
 import com.dribbble.evilchaos.shots.activity.LoginActivity;
 import com.dribbble.evilchaos.shots.activity.ShotOrLikeActivity;
+import com.dribbble.evilchaos.shots.activity.UserLikesActivity;
+import com.dribbble.evilchaos.shots.activity.UserShotsActivity;
 import com.dribbble.evilchaos.shots.entity.User;
 import com.dribbble.evilchaos.shots.http.BaseCallback;
 import com.dribbble.evilchaos.shots.http.OkHttpUtils;
@@ -176,35 +178,40 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         User user = UserLocalData.getUser(mContext);
-        String tag = null;
-        Intent intent = new Intent(getContext(), ShotOrLikeActivity.class);
+        //String tag = null;
+        Intent intent;
         switch (v.getId()) {
             case R.id.app_shots:
                 String shots_url = user.getShots_url();
-                tag = "shots_tag";
+                intent = new Intent(getContext(), UserShotsActivity.class);
+                intent.putExtra("username",user.getUsername());
+                //tag = "shots_tag";
                 intent.putExtra("shots_url",shots_url);
+                startActivity(intent);
                 break;
 
             case R.id.app_likes:
                 //传tag
                 String likes_url = user.getLikes_url();
-                tag = "likes_tag";
+                intent = new Intent(getContext(), UserLikesActivity.class);
+                //tag = "likes_tag";
+                intent.putExtra("username",user.getUsername());
                 intent.putExtra("likes_url",likes_url);
+                startActivity(intent);
                 break;
 
             case R.id.app_projects:
                 break;
             case R.id.app_buckets:
                 String buckets_url = user.getBuckets_url();
-                tag = "buckets_tag";
-                intent.putExtra("buckets_url",buckets_url);
+                //intent = new Intent(getContext(),)
+                //tag = "buckets_tag";
+                //intent.putExtra("username",user.getUsername());
+                //intent.putExtra("buckets_url",buckets_url);
                 break;
             case R.id.app_Teams:
                 break;
         }
-
-        intent.putExtra("username",user.getUsername());
-        intent.putExtra(TAG,tag);
-        startActivity(intent);
+        //intent.putExtra(TAG,tag);
     }
 }

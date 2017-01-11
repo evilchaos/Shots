@@ -1,5 +1,6 @@
 package com.dribbble.evilchaos.shots.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -10,11 +11,9 @@ import android.widget.TextView;
 import com.cjj.MaterialRefreshLayout;
 import com.cjj.MaterialRefreshListener;
 import com.dribbble.evilchaos.shots.R;
-import com.dribbble.evilchaos.shots.entity.ShotItem;
 import com.dribbble.evilchaos.shots.http.BaseCallback;
 import com.dribbble.evilchaos.shots.http.OkHttpUtils;
-
-import java.util.List;
+import com.dribbble.evilchaos.shots.util.UserLocalData;
 
 import okhttp3.Request;
 import okhttp3.Response;
@@ -23,16 +22,19 @@ import okhttp3.Response;
  * Created by liujiachao on 2017/1/10.
  */
 
-public abstract class BaseInfoActivity extends BaseActivity {
+public abstract class BaseInfoActivity  extends BaseActivity {
 
+
+    protected Intent intent;
     protected int layoutId;
     protected ImageView mImageView;
     protected TextView userTitleName;
     protected MaterialRefreshLayout mRefreshLayout;
     protected RecyclerView mRecycleView;
 
-    private int page = 1;
-    private int per_page = 30;
+    protected int page = 1;
+    protected int per_page = 30;
+    public static final int REQUEST_CODE = 1;
 
     protected OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
     protected static final int STATE_NORMAL=0;
@@ -41,15 +43,20 @@ public abstract class BaseInfoActivity extends BaseActivity {
     protected int state = STATE_NORMAL;
 
     protected String userName;
+    protected String baseUrl;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         initLayoutId();
+        intent = getIntent();
+        baseUrl = getBaseUrl();
         super.onCreate(savedInstanceState);
         initViews();
     }
 
     protected void initViews() {
+        setContentView(layoutId);
         mImageView = (ImageView)findViewById(R.id.likes_back);
 
         mImageView.setOnClickListener(new View.OnClickListener() {
@@ -65,6 +72,7 @@ public abstract class BaseInfoActivity extends BaseActivity {
         mRecycleView = (RecyclerView)findViewById(R.id.user_info_rec);
 
         initRefreshLayout();
+        getData();
 
     }
 
@@ -95,42 +103,27 @@ public abstract class BaseInfoActivity extends BaseActivity {
         getData();
     }
 
-    protected void getData() {
-        String url = buildUrl();
-        okHttpUtils.get(url, new BaseCallback<List<ShotItem>>() {
-            @Override
-            public void onBeforeRequest(Request request) {
-
-            }
-
-            @Override
-            public void onResponse(Response response) {
-
-            }
-
-            @Override
-            public void onFailure(Request request, Exception e) {
-
-            }
-
-            @Override
-            public void onSuccess(Response response, List<ShotItem> shotsData) {
-                shotItems = shotsData;
-                showData();
-            }
-
-            @Override
-            public void OnError(Response response, int code, Exception e) {
-
-            }
-        });
-
-    }
-
-    protected abstract String buildUrl();
+    protected abstract void getData() ;
 
     protected abstract void showData();
 
+    protected abstract String getBaseUrl();
 
     protected abstract void initLayoutId();
+
+    protected String buildUrl() {
+        String accessToken = getAccessToken();
+        return  ( baseUrl + "?page=" + String.valueOf(page) + "&per_page=" + String.valueOf(per_page) + "&access_token=" + accessToken );
+    }
+
+    protected String getAccessToken() {
+
+        String accessToken = UserLocalData.getToken(this);
+        if (accessToken == null) {
+            Intent intent = new Intent(this,LoginActivity.class);
+            startActivityForResult(intent,REQUEST_CODE);
+        }
+
+        return  accessToken;
+    }
 }
