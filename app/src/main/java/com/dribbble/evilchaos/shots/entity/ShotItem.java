@@ -32,6 +32,16 @@ public class ShotItem implements Serializable{
 
     //该Shot所属的用户
     User user;
+    Team team;
+
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
 
     public int getId() {
         return id;
@@ -109,7 +119,7 @@ public class ShotItem implements Serializable{
         return attachments_count;
     }
 
-    public void setAttachment_count(int attachment_count) {
+    public void setAttachments_count(int attachment_count) {
         this.attachments_count = attachment_count;
     }
 

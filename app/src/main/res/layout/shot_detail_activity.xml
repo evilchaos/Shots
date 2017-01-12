@@ -72,7 +72,7 @@
             >
 
             <LinearLayout
-                android:id="@+id/shots_header"
+                android:id="@+id/detail_shots_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"

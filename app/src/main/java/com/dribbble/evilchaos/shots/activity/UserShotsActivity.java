@@ -8,26 +8,40 @@ import android.view.View;
 import com.dribbble.evilchaos.shots.R;
 import com.dribbble.evilchaos.shots.adapter.BaseAdapter;
 import com.dribbble.evilchaos.shots.adapter.BriefAdapter;
+import com.dribbble.evilchaos.shots.adapter.UserShotsAdapter;
 import com.dribbble.evilchaos.shots.entity.ShotItem;
+import com.dribbble.evilchaos.shots.http.SpotsCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Response;
 
 /**
  * Created by liujiachao on 2017/1/11.
  */
 
-public class UserShotsActivity extends BaseInfoActivity<List<ShotItem>> {
-
-    private BriefAdapter adapter;
+public class UserShotsActivity extends BaseInfoActivity {
+    private UserShotsAdapter adapter;
     private List<ShotItem> shotItems = new ArrayList<>();
-    @Override
-    protected void showData(List<ShotItem> data) {
-        shotItems = data;
-        switch (state) {
 
+    @Override
+    protected void getData() {
+        String url = buildUrl();
+        okHttpUtils.get(url,new SpotsCallback<List<ShotItem>>(UserShotsActivity.this){
+            @Override
+            public void onSuccess(Response response, List<ShotItem> shotDatas) {
+                shotItems = shotDatas;
+                showData();
+            }
+        });
+    }
+
+    @Override
+    protected void showData() {
+        switch (state) {
             case STATE_NORMAL:
-                adapter = new BriefAdapter(this, shotItems);
+                adapter = new UserShotsAdapter(this, shotItems);
                 mRecycleView.setAdapter(adapter);
                 mRecycleView.setLayoutManager(new LinearLayoutManager(this));
                 //mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL_LIST));
@@ -56,8 +70,8 @@ public class UserShotsActivity extends BaseInfoActivity<List<ShotItem>> {
                 mRefreshLayout.finishRefreshLoadMore();
                 break;
         }
-
     }
+
 
     @Override
     protected String getBaseUrl() {

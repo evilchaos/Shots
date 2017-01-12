@@ -9,7 +9,9 @@ import android.view.View;
 import com.dribbble.evilchaos.shots.R;
 import com.dribbble.evilchaos.shots.adapter.BaseAdapter;
 import com.dribbble.evilchaos.shots.adapter.BriefAdapter;
+import com.dribbble.evilchaos.shots.adapter.UserLikeAdapter;
 import com.dribbble.evilchaos.shots.entity.ShotItem;
+import com.dribbble.evilchaos.shots.entity.UserLikes;
 import com.dribbble.evilchaos.shots.http.SpotsCallback;
 
 import java.util.ArrayList;
@@ -22,9 +24,9 @@ import okhttp3.Response;
  */
 
 public class UserLikesActivity extends BaseInfoActivity  {
-    private BriefAdapter adapter;
+    private UserLikeAdapter adapter;
 
-    private List<ShotItem> shotItems = new ArrayList<>();
+    private List<UserLikes> userLikes = new ArrayList<>();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,10 +35,10 @@ public class UserLikesActivity extends BaseInfoActivity  {
     @Override
     protected void getData() {
         String url = buildUrl();
-        okHttpUtils.get(url,new SpotsCallback<List<ShotItem>>(UserLikesActivity.this){
+        okHttpUtils.get(url,new SpotsCallback<List<UserLikes>>(UserLikesActivity.this){
             @Override
-            public void onSuccess(Response response, List<ShotItem> shotDatas) {
-                shotItems = shotDatas;
+            public void onSuccess(Response response, List<UserLikes> shotDatas) {
+                userLikes = shotDatas;
                 showData();
             }
         });
@@ -45,7 +47,37 @@ public class UserLikesActivity extends BaseInfoActivity  {
 
     @Override
     protected void showData() {
+        switch (state) {
+            case STATE_NORMAL:
+                adapter = new UserLikeAdapter(this, userLikes);
+                mRecycleView.setAdapter(adapter);
+                mRecycleView.setLayoutManager(new LinearLayoutManager(this));
+                //mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL_LIST));
+                adapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(UserLikesActivity.this,ShotsDetailActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("shots_data",userLikes.get(position));
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }
+                });
+                break;
 
+            case STATE_REFRESH:
+                adapter.clear();
+                adapter.addData(userLikes);
+                mRecycleView.scrollToPosition(0);
+                mRefreshLayout.finishRefresh();
+                break;
+
+            case STATE_MORE:
+                adapter.addData(adapter.getDatas().size(), userLikes);
+                mRecycleView.scrollToPosition(adapter.getDatas().size());
+                mRefreshLayout.finishRefreshLoadMore();
+                break;
+        }
     }
 
 
