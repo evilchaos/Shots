@@ -53,16 +53,16 @@ public class UserLikesActivity extends BaseInfoActivity  {
                 mRecycleView.setAdapter(adapter);
                 mRecycleView.setLayoutManager(new LinearLayoutManager(this));
                 //mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL_LIST));
-                adapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        Intent intent = new Intent(UserLikesActivity.this,ShotsDetailActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("shots_data",userLikes.get(position));
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                    }
-                });
+//                adapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(View view, int position) {
+//                        Intent intent = new Intent(UserLikesActivity.this,ShotsDetailActivity.class);
+//                        Bundle bundle = new Bundle();
+//                        bundle.putSerializable("shots_data",userLikes.get(position));
+//                        intent.putExtras(bundle);
+//                        startActivity(intent);
+//                    }
+//                });
                 break;
 
             case STATE_REFRESH:

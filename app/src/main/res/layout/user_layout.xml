@@ -215,12 +215,12 @@
         android:layout_height="0.5sp"
         android:background="@color/divider"
         />
+
     <com.dribbble.evilchaos.shots.widget.AppleItemView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id = "@+id/app_projects"
-        shots:itemTag = "project"
-        android:clickable="false"
+        android:id = "@+id/app_buckets"
+        shots:itemTag = "buckets"
         />
     <View
         android:layout_width="match_parent"
@@ -230,8 +230,9 @@
     <com.dribbble.evilchaos.shots.widget.AppleItemView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id = "@+id/app_buckets"
-        shots:itemTag = "buckets"
+        android:id = "@+id/app_projects"
+        shots:itemTag = "project"
+        android:clickable="false"
         />
     <View
         android:layout_width="match_parent"
@@ -250,8 +251,5 @@
         android:layout_height="0.5sp"
         android:background="@color/divider"
         />
-
-
-
 
 </LinearLayout>

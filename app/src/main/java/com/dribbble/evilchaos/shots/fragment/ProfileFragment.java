@@ -8,9 +8,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dribbble.evilchaos.shots.R;
+import com.dribbble.evilchaos.shots.activity.BucketsActivity;
+import com.dribbble.evilchaos.shots.activity.FollowerActivity;
+import com.dribbble.evilchaos.shots.activity.FollowingActivity;
 import com.dribbble.evilchaos.shots.activity.LoginActivity;
 import com.dribbble.evilchaos.shots.activity.ShotOrLikeActivity;
 import com.dribbble.evilchaos.shots.activity.UserLikesActivity;
@@ -47,6 +51,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private TextView mLocation;
     private TextView mLikesNum;
 
+    private LinearLayout mUserFollower;
+    private LinearLayout mUserFollowee;
+
     private AppleItemView mAppShots;
     private AppleItemView mAppLikes;
     private AppleItemView mAppProjects;
@@ -76,11 +83,22 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         mLocation = (TextView)mView.findViewById(R.id.location);
         mLikesNum = (TextView)mView.findViewById(R.id.user_likes_num);
 
+        mUserFollower = (LinearLayout)mView.findViewById(R.id.user_followers);
+        mUserFollowee = (LinearLayout)mView.findViewById(R.id.user_followings);
+
+
         mAppShots = (AppleItemView)mView.findViewById(R.id.app_shots);
         mAppLikes = (AppleItemView)mView.findViewById(R.id.app_likes);
         mAppProjects = (AppleItemView)mView.findViewById(R.id.app_projects);
         mAppBuckets = (AppleItemView)mView.findViewById(R.id.app_buckets);
         mAppTeams = (AppleItemView)mView.findViewById(R.id.app_Teams);
+
+        mUserFollower.setOnClickListener(this);
+        mUserFollowee.setOnClickListener(this);
+
+        mAppShots.setOnClickListener(this);
+        mAppLikes.setOnClickListener(this);
+        mAppBuckets.setOnClickListener(this);
         
         getUserInfo();
     }
@@ -156,10 +174,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         mAppTeams.setItemNum(String.valueOf(user.getTeams_count()));
         mAppTeams.setTitleText("team");
 
-        mAppShots.setOnClickListener(this);
-        mAppLikes.setOnClickListener(this);
-        mAppBuckets.setOnClickListener(this);
-
     }
 
     private String getAccessToken() {
@@ -181,6 +195,22 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         //String tag = null;
         Intent intent;
         switch (v.getId()) {
+            case R.id.user_followers:
+                String followers_url = user.getFollowers_url();
+                intent = new Intent(getContext(), FollowerActivity.class);
+                intent.putExtra("username",user.getUsername());
+                intent.putExtra("followers_url",followers_url);
+                startActivity(intent);
+                break;
+
+            case R.id.user_followings:
+                String followings_url = user.getFollowing_url();
+                intent = new Intent(getContext(), FollowingActivity.class);
+                intent.putExtra("username",user.getUsername());
+                intent.putExtra("followings_url",followings_url);
+                startActivity(intent);
+                break;
+
             case R.id.app_shots:
                 String shots_url = user.getShots_url();
                 intent = new Intent(getContext(), UserShotsActivity.class);
@@ -204,10 +234,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.app_buckets:
                 String buckets_url = user.getBuckets_url();
-                //intent = new Intent(getContext(),)
-                //tag = "buckets_tag";
-                //intent.putExtra("username",user.getUsername());
-                //intent.putExtra("buckets_url",buckets_url);
+                intent = new Intent(getContext(), BucketsActivity.class);
+                intent.putExtra("username",user.getUsername());
+                intent.putExtra("buckets_url",buckets_url);
+                startActivity(intent);
                 break;
             case R.id.app_Teams:
                 break;
