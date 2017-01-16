@@ -16,7 +16,6 @@ import com.dribbble.evilchaos.shots.activity.BucketsActivity;
 import com.dribbble.evilchaos.shots.activity.FollowerActivity;
 import com.dribbble.evilchaos.shots.activity.FollowingActivity;
 import com.dribbble.evilchaos.shots.activity.LoginActivity;
-import com.dribbble.evilchaos.shots.activity.ShotOrLikeActivity;
 import com.dribbble.evilchaos.shots.activity.UserLikesActivity;
 import com.dribbble.evilchaos.shots.activity.UserShotsActivity;
 import com.dribbble.evilchaos.shots.entity.User;
@@ -60,6 +59,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private AppleItemView mAppBuckets;
     private AppleItemView mAppTeams;
 
+    Bundle mBundle;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -75,6 +76,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private void initViews() {
         mContext = getContext();
+        mBundle = getArguments();
+
         mUserTitle = (TextView)mView.findViewById(R.id.app_user_name);
         mDraweeView = (SimpleDraweeView)mView.findViewById(R.id.user_img);
         mUserName = (TextView)mView.findViewById(R.id.user_name);
@@ -114,7 +117,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getData(String accessToken) {
-        String url = API.dribbble_user_info + "?access_token=" + accessToken;
+        String url;
+        if (mBundle == null) {
+            url = API.dribbble_authenticated_user + "?access_token=" + accessToken;
+        } else {
+            url = API.dribbble_user_info + mBundle.getString("user_name") +"?access_token=" + accessToken;
+        }
+
         okHttpUtils.get(url,new BaseCallback<User>() {
             @Override
             public void onBeforeRequest(Request request) {

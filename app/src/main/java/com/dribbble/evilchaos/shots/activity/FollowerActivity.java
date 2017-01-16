@@ -8,9 +8,9 @@ import android.view.View;
 import com.dribbble.evilchaos.shots.R;
 import com.dribbble.evilchaos.shots.adapter.BaseAdapter;
 import com.dribbble.evilchaos.shots.adapter.FollowerAdapter;
-import com.dribbble.evilchaos.shots.adapter.UserLikeAdapter;
 import com.dribbble.evilchaos.shots.entity.FollowerData;
 import com.dribbble.evilchaos.shots.http.SpotsCallback;
+import com.dribbble.evilchaos.shots.widget.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class FollowerActivity extends BaseInfoActivity {
 
     @Override
     protected void initLayoutId() {
-        layoutId = R.layout.user_follow;
+        layoutId = R.layout.user_info_item;
     }
 
     @Override
@@ -56,7 +56,19 @@ public class FollowerActivity extends BaseInfoActivity {
                 adapter = new FollowerAdapter(this, followerDatas);
                 mRecycleView.setAdapter(adapter);
                 mRecycleView.setLayoutManager(new LinearLayoutManager(this));
-                //mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL_LIST));
+                mRecycleView.addItemDecoration(new DividerItemDecoration(FollowerActivity.this,DividerItemDecoration.VERTICAL_LIST));
+                adapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener(){
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(FollowerActivity.this,ProfileActivity.class);
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString("user_name",followerDatas.get(position).getFollower().getUsername());
+                        intent.putExtras(bundle);
+
+                        startActivity(intent);
+                    }
+                });
                 break;
 
             case STATE_REFRESH:

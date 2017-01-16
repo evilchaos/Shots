@@ -28,7 +28,7 @@ public class FollowingAdapter extends SimpleAdapter<FollowingData> {
 
         viewHolder.getTextView(R.id.follow_name).setText(followee.getName());
         viewHolder.getTextView(R.id.follow_username).setText(followee.getUsername());
-        viewHolder.getTextView(R.id.follow_shots_num).setText(followee.getShots_count());
-        viewHolder.getTextView(R.id.follow_follower_num).setText(followee.getFollowers_count());
+        viewHolder.getTextView(R.id.follow_shots_num).setText(String.valueOf(followee.getShots_count()));
+        viewHolder.getTextView(R.id.follow_follower_num).setText(String.valueOf(followee.getFollowers_count()));
     }
 }

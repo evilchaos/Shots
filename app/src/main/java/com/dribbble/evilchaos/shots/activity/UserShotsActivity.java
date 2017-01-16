@@ -44,7 +44,6 @@ public class UserShotsActivity extends BaseInfoActivity {
                 adapter = new UserShotsAdapter(this, shotItems);
                 mRecycleView.setAdapter(adapter);
                 mRecycleView.setLayoutManager(new LinearLayoutManager(this));
-                //mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL_LIST));
                 adapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {

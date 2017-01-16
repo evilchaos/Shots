@@ -12,7 +12,10 @@ public class API {
     public static final String CLIENT_SECRET = "96acb24c66d8c09c59262bdd4694567005fc6f2d51230e134f355123ed37c04c";
 
     public static final String dribbble_token_url = "https://dribbble.com/oauth/token";
-    public static final String dribbble_user_info = "https://api.dribbble.com/v1/user";
+    //Get a single user + username
+    public static final String dribbble_user_info = "https://api.dribbble.com/v1/users/";
+    //Get the authenticated user
+    public static final String dribbble_authenticated_user = "https://api.dribbble.com/v1/user";
 
     //后接access_token 如https://api.dribbble.com/v1/user?access_token=OAUTH_TOKEN
     // 后接username 如https://api.dribbble.com/v1/users/simplebits?access_token=OAUTH_TOKEN

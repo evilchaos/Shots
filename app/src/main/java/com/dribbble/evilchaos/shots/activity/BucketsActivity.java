@@ -6,6 +6,7 @@ import com.dribbble.evilchaos.shots.R;
 import com.dribbble.evilchaos.shots.adapter.BucketsAdapter;
 import com.dribbble.evilchaos.shots.entity.BucketData;
 import com.dribbble.evilchaos.shots.http.SpotsCallback;
+import com.dribbble.evilchaos.shots.widget.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class BucketsActivity extends BaseInfoActivity {
 
     @Override
     protected void initLayoutId() {
-        layoutId = R.layout.buckets_item;
+        layoutId = R.layout.user_info_item;
     }
 
     @Override
@@ -50,7 +51,7 @@ public class BucketsActivity extends BaseInfoActivity {
                 adapter = new BucketsAdapter(this, mBucketDatas);
                 mRecycleView.setAdapter(adapter);
                 mRecycleView.setLayoutManager(new LinearLayoutManager(this));
-                //mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL_LIST));
+                mRecycleView.addItemDecoration(new DividerItemDecoration(BucketsActivity.this,DividerItemDecoration.VERTICAL_LIST));
                 break;
 
             case STATE_REFRESH:

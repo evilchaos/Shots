@@ -4,8 +4,6 @@ import android.content.Context;
 
 import com.dribbble.evilchaos.shots.R;
 import com.dribbble.evilchaos.shots.entity.BucketData;
-import com.dribbble.evilchaos.shots.entity.FollowerData;
-
 import java.util.List;
 
 /**
@@ -21,6 +19,6 @@ public class BucketsAdapter extends SimpleAdapter<BucketData> {
     @Override
     public void bindData(BaseViewHolder viewHolder, BucketData bucketData) {
         viewHolder.getTextView(R.id.buckets_name).setText(bucketData.getName());
-        viewHolder.getTextView(R.id.buckets_shots_num).setText(bucketData.getShots_count());
+        viewHolder.getTextView(R.id.buckets_shots_num).setText(String.valueOf(bucketData.getShots_count()));
     }
 }
