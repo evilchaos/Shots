@@ -25,7 +25,7 @@ public class UserShotsAdapter extends SimpleAdapter<ShotItem> {
 
         SimpleDraweeView shotDrawView = (SimpleDraweeView)viewHolder.getView(R.id.user_shot_pic);
         String shots_image_url = shotItem.getImages().getHeightImageUri();
-        viewHolder.getView(R.id.shots_gif).setVisibility(shotItem.isAnimated() ? View.VISIBLE : View.INVISIBLE);
+        viewHolder.getView(R.id.user_shots_gif).setVisibility(shotItem.isAnimated() ? View.VISIBLE : View.INVISIBLE);
         shotDrawView.setImageURI(shots_image_url);
 
         viewHolder.getTextView(R.id.user_shot_title).setText(shotItem.getTitle());

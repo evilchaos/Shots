@@ -28,7 +28,7 @@ public abstract class BaseInfoActivity  extends BaseActivity {
     protected Intent intent;
     protected int layoutId;
     protected ImageView mImageView;
-    protected TextView userTitleName;
+    protected TextView mTitleName;
     protected MaterialRefreshLayout mRefreshLayout;
     protected RecyclerView mRecycleView;
 
@@ -42,7 +42,7 @@ public abstract class BaseInfoActivity  extends BaseActivity {
     protected static final int STATE_MORE=2;
     protected int state = STATE_NORMAL;
 
-    protected String userName;
+    protected String name;
     protected String baseUrl;
 
 
@@ -58,19 +58,17 @@ public abstract class BaseInfoActivity  extends BaseActivity {
     protected void initViews() {
         setContentView(layoutId);
         mImageView = (ImageView)findViewById(R.id.likes_back);
-
         mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-
-        userTitleName = (TextView)findViewById(R.id.user_title_name);
-        userTitleName.setText(userName);
+        mTitleName = (TextView)findViewById(R.id.user_title_name);
         mRefreshLayout = (MaterialRefreshLayout)findViewById(R.id.user_info_refresh);
         mRecycleView = (RecyclerView)findViewById(R.id.user_info_rec);
 
+        setActivityTitle();
         initRefreshLayout();
         getData();
 
@@ -102,6 +100,8 @@ public abstract class BaseInfoActivity  extends BaseActivity {
         state = STATE_MORE;
         getData();
     }
+
+    protected abstract void setActivityTitle();
 
     protected abstract void getData() ;
 

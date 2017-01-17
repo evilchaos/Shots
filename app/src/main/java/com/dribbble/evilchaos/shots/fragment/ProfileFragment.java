@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -49,6 +50,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private TextView mFollowingNum;
     private TextView mLocation;
     private TextView mLikesNum;
+    private ImageView mBackArrow;
 
     private LinearLayout mUserFollower;
     private LinearLayout mUserFollowee;
@@ -77,6 +79,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private void initViews() {
         mContext = getContext();
         mBundle = getArguments();
+
+        mBackArrow = (ImageView)mView.findViewById(R.id.user_back);
+        mBackArrow.setOnClickListener(this);
 
         mUserTitle = (TextView)mView.findViewById(R.id.app_user_name);
         mDraweeView = (SimpleDraweeView)mView.findViewById(R.id.user_img);
@@ -159,7 +164,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     private void showUserInfo(User user) {
-        mUserTitle.setText(user.getUsername());
+        mUserTitle.setText(user.getName());
         mDraweeView.setImageURI(user.getAvatar_url());
         mUserName.setText(user.getUsername());
         mFollowerNum.setText(String.valueOf(user.getFollowers_count()));
@@ -207,7 +212,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             case R.id.user_followers:
                 String followers_url = user.getFollowers_url();
                 intent = new Intent(getContext(), FollowerActivity.class);
-                intent.putExtra("username",user.getUsername());
+                intent.putExtra("name",user.getName());
                 intent.putExtra("followers_url",followers_url);
                 startActivity(intent);
                 break;
@@ -215,7 +220,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             case R.id.user_followings:
                 String followings_url = user.getFollowing_url();
                 intent = new Intent(getContext(), FollowingActivity.class);
-                intent.putExtra("username",user.getUsername());
+                intent.putExtra("name",user.getName());
                 intent.putExtra("followings_url",followings_url);
                 startActivity(intent);
                 break;
@@ -223,7 +228,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             case R.id.app_shots:
                 String shots_url = user.getShots_url();
                 intent = new Intent(getContext(), UserShotsActivity.class);
-                intent.putExtra("username",user.getUsername());
+                intent.putExtra("name",user.getName());
                 //tag = "shots_tag";
                 intent.putExtra("shots_url",shots_url);
                 startActivity(intent);
@@ -234,7 +239,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 String likes_url = user.getLikes_url();
                 intent = new Intent(getContext(), UserLikesActivity.class);
                 //tag = "likes_tag";
-                intent.putExtra("username",user.getUsername());
+                intent.putExtra("name",user.getName());
                 intent.putExtra("likes_url",likes_url);
                 startActivity(intent);
                 break;
@@ -244,11 +249,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             case R.id.app_buckets:
                 String buckets_url = user.getBuckets_url();
                 intent = new Intent(getContext(), BucketsActivity.class);
-                intent.putExtra("username",user.getUsername());
+                intent.putExtra("name",user.getName());
                 intent.putExtra("buckets_url",buckets_url);
                 startActivity(intent);
                 break;
             case R.id.app_Teams:
+                break;
+            case R.id.user_back:
+                getActivity().finish();
                 break;
         }
         //intent.putExtra(TAG,tag);

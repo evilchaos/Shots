@@ -1,11 +1,15 @@
 package com.dribbble.evilchaos.shots.activity;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 
 import com.dribbble.evilchaos.shots.R;
+import com.dribbble.evilchaos.shots.adapter.BaseAdapter;
 import com.dribbble.evilchaos.shots.adapter.BucketsAdapter;
 import com.dribbble.evilchaos.shots.entity.BucketData;
 import com.dribbble.evilchaos.shots.http.SpotsCallback;
+import com.dribbble.evilchaos.shots.widget.DividerDecorationForBuckets;
 import com.dribbble.evilchaos.shots.widget.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -45,13 +49,29 @@ public class BucketsActivity extends BaseInfoActivity {
     }
 
     @Override
+    protected void setActivityTitle() {
+        String name = intent.getStringExtra("name");
+        String title = name + "'s" + " buckets";
+        mTitleName.setText(title);
+    }
+
+    @Override
     protected void showData() {
         switch (state) {
             case STATE_NORMAL:
                 adapter = new BucketsAdapter(this, mBucketDatas);
                 mRecycleView.setAdapter(adapter);
                 mRecycleView.setLayoutManager(new LinearLayoutManager(this));
-                mRecycleView.addItemDecoration(new DividerItemDecoration(BucketsActivity.this,DividerItemDecoration.VERTICAL_LIST));
+                mRecycleView.addItemDecoration(new DividerDecorationForBuckets(BucketsActivity.this, DividerDecorationForBuckets.VERTICAL_LIST));
+                adapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(BucketsActivity.this,BucketShotsActivity.class);
+                        intent.putExtra("bucket_name",mBucketDatas.get(position).getName());
+                        intent.putExtra("bucket_id",String.valueOf(mBucketDatas.get(position).getId()));
+                        startActivity(intent);
+                    }
+                });
                 break;
 
             case STATE_REFRESH:

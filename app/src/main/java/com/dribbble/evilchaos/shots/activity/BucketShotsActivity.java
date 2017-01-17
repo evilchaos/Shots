@@ -11,6 +11,7 @@ import com.dribbble.evilchaos.shots.adapter.BriefAdapter;
 import com.dribbble.evilchaos.shots.adapter.UserShotsAdapter;
 import com.dribbble.evilchaos.shots.entity.ShotItem;
 import com.dribbble.evilchaos.shots.http.SpotsCallback;
+import com.dribbble.evilchaos.shots.util.API;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,17 +19,17 @@ import java.util.List;
 import okhttp3.Response;
 
 /**
- * Created by liujiachao on 2017/1/11.
+ * Created by liujiachao on 2017/1/17.
  */
 
-public class UserShotsActivity extends BaseInfoActivity {
-    private UserShotsAdapter adapter;
-    private List<ShotItem> shotItems = new ArrayList<>();
+public class BucketShotsActivity extends BaseInfoActivity {
 
+    private BriefAdapter adapter;
+    private List<ShotItem> shotItems = new ArrayList<>();
     @Override
     protected void getData() {
         String url = buildUrl();
-        okHttpUtils.get(url,new SpotsCallback<List<ShotItem>>(UserShotsActivity.this){
+        okHttpUtils.get(url, new SpotsCallback <List<ShotItem>>(BucketShotsActivity.this){
             @Override
             public void onSuccess(Response response, List<ShotItem> shotDatas) {
                 shotItems = shotDatas;
@@ -41,13 +42,13 @@ public class UserShotsActivity extends BaseInfoActivity {
     protected void showData() {
         switch (state) {
             case STATE_NORMAL:
-                adapter = new UserShotsAdapter(this, shotItems);
+                adapter = new BriefAdapter(this, shotItems);
                 mRecycleView.setAdapter(adapter);
                 mRecycleView.setLayoutManager(new LinearLayoutManager(this));
                 adapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Intent intent = new Intent(UserShotsActivity.this,ShotsDetailActivity.class);
+                        Intent intent = new Intent(BucketShotsActivity.this,ShotsDetailActivity.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("shots_data",shotItems.get(position));
                         intent.putExtras(bundle);
@@ -71,10 +72,10 @@ public class UserShotsActivity extends BaseInfoActivity {
         }
     }
 
-
     @Override
     protected String getBaseUrl() {
-        return intent.getStringExtra("shots_url");
+        String bucket_id = intent.getStringExtra("bucket_id");
+        return API.url + "buckets/"  + bucket_id + "/" + "shots";
     }
 
     @Override
@@ -84,8 +85,7 @@ public class UserShotsActivity extends BaseInfoActivity {
 
     @Override
     protected void setActivityTitle() {
-        String name = intent.getStringExtra("name");
-        String title = name + "'s" + " shots";
-        mTitleName.setText(title);
+        String name = intent.getStringExtra("bucket_name");
+        mTitleName.setText(name);
     }
 }

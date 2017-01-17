@@ -67,6 +67,9 @@ public class ShotsDetailActivity extends BaseActivity {
     DrawableCenterTextView commTextView;
     TextView desTextView;
     RecyclerView commRecyclerView;
+    private TextView tvBack;
+
+    private LinearLayout detailShotsHeader;
     //NestedListView commListView;
 
     List<CommentItem> commentItemList = new ArrayList<>();
@@ -84,11 +87,19 @@ public class ShotsDetailActivity extends BaseActivity {
     }
 
     private void initViews() {
+        detailShotsHeader = (LinearLayout)findViewById(R.id.detail_shots_header);
         shotPicAvatar = (SimpleDraweeView)findViewById(R.id.detail_author_avatar);
         titleTextView = (TextView)findViewById(R.id.detail_shots_title);
         userNameTextView = (TextView)findViewById(R.id.detail_shots_user_name);
         timeTextView = (TextView) findViewById(R.id.detail_shots_time);
         shotPicDrawee = (SimpleDraweeView)findViewById(R.id.detail_shot_pic);
+        tvBack = (TextView)findViewById(R.id.back);
+        tvBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         expTextView = (DrawableCenterTextView)findViewById(R.id.detail_view_num);
         likeTextView = (DrawableCenterTextView)findViewById(R.id.detail_like_num);
@@ -102,9 +113,15 @@ public class ShotsDetailActivity extends BaseActivity {
     }
 
     private void fillShotsInfo() {
-        shotPicAvatar.setImageURI(shotItem.getUser().getAvatar_url());
+
+        if (shotItem.getUser() == null) {
+            detailShotsHeader.setVisibility(View.GONE);
+        } else {
+            shotPicAvatar.setImageURI(shotItem.getUser().getAvatar_url());
+            userNameTextView.setText(shotItem.getUser().getName());
+        }
+
         titleTextView.setText(shotItem.getTitle());
-        userNameTextView.setText(shotItem.getUser().getName());
         timeTextView.setText(TimeUtils.getTimeFromStandardFormat(shotItem.getUpdated_at()));
 
         String shots_image_url = shotItem.getImages().getHeightImageUri();

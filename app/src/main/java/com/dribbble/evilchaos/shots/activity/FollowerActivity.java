@@ -37,6 +37,13 @@ public class FollowerActivity extends BaseInfoActivity {
     }
 
     @Override
+    protected void setActivityTitle() {
+        String name = intent.getStringExtra("name");
+        String title = name + "'s" + " follower";
+        mTitleName.setText(title);
+    }
+
+    @Override
     protected void getData() {
         String url = buildUrl();
         okHttpUtils.get(url,new SpotsCallback<List<FollowerData>>(FollowerActivity.this){

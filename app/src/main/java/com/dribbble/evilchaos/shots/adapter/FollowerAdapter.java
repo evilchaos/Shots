@@ -29,7 +29,7 @@ public class FollowerAdapter extends SimpleAdapter<FollowerData> {
 
         viewHolder.getTextView(R.id.follow_name).setText(follower.getName());
         viewHolder.getTextView(R.id.follow_username).setText(follower.getUsername());
-        viewHolder.getTextView(R.id.follow_shots_num).setText(follower.getShots_count());
-        viewHolder.getTextView(R.id.follow_follower_num).setText(follower.getFollowers_count());
+        viewHolder.getTextView(R.id.follow_shots_num).setText(String.valueOf(follower.getShots_count()));
+        viewHolder.getTextView(R.id.follow_follower_num).setText(String.valueOf(follower.getFollowers_count()));
     }
 }

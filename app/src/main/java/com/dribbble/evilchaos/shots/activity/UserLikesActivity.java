@@ -89,4 +89,11 @@ public class UserLikesActivity extends BaseInfoActivity  {
     protected void initLayoutId() {
         layoutId = R.layout.user_info_item;
     }
+
+    @Override
+    protected void setActivityTitle() {
+        String name = intent.getStringExtra("name");
+        String title = name + "'s" + " likes";
+        mTitleName.setText(title);
+    }
 }

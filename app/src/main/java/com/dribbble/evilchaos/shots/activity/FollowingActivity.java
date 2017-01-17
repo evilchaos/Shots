@@ -35,6 +35,8 @@ public class FollowingActivity extends BaseInfoActivity {
         layoutId = R.layout.user_info_item;
     }
 
+
+
     @Override
     protected void getData() {
         String url = buildUrl();
@@ -45,6 +47,13 @@ public class FollowingActivity extends BaseInfoActivity {
                 showData();
             }
         });
+    }
+
+    @Override
+    protected void setActivityTitle() {
+        String name = intent.getStringExtra("name");
+        String title = name + "'s" + " following";
+        mTitleName.setText(title);
     }
 
     @Override
