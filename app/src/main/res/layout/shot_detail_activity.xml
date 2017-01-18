@@ -171,7 +171,7 @@
                     android:layout_height="wrap_content"
                     android:text="300"
                     android:drawablePadding="5dp"
-                    android:drawableLeft="@drawable/selector_icon_like"
+                    android:drawableLeft="@drawable/iv_like_grey_24dp"
                     fontPath= "fonts/YatraOne-Regular.ttf"
                     tools:ignore="MissingPrefix"
                     android:gravity="center_vertical"

@@ -18,6 +18,7 @@ import com.dribbble.evilchaos.shots.entity.AccessToken;
 import com.dribbble.evilchaos.shots.entity.User;
 import com.dribbble.evilchaos.shots.http.BaseCallback;
 import com.dribbble.evilchaos.shots.http.OkHttpUtils;
+import com.dribbble.evilchaos.shots.http.SimpleCallback;
 import com.dribbble.evilchaos.shots.util.API;
 import com.dribbble.evilchaos.shots.util.UserLocalData;
 
@@ -104,21 +105,7 @@ public class LoginActivity extends BaseActivity {
         mAuthMap.put("client_secret",API.CLIENT_SECRET);
         mAuthMap.put("code",returnCode);
         mAuthMap.put("state",API.mState);
-        okHttpUtils.post(API.dribbble_token_url,mAuthMap,new BaseCallback<AccessToken>() {
-            @Override
-            public void onBeforeRequest(Request request) {
-
-            }
-
-            @Override
-            public void onResponse(Response response) {
-
-            }
-
-            @Override
-            public void onFailure(Request request, Exception e) {
-
-            }
+        okHttpUtils.post(API.dribbble_token_url,mAuthMap,new SimpleCallback<AccessToken>() {
 
             @Override
             public void onSuccess(Response response, AccessToken accessToken) {
@@ -143,30 +130,11 @@ public class LoginActivity extends BaseActivity {
         String accessToken = UserLocalData.getToken(LoginActivity.this);
         String url = API.dribbble_user_info + "?access_token=" + accessToken;
 
-        okHttpUtils.get(url,new BaseCallback<User>() {
-            @Override
-            public void onBeforeRequest(Request request) {
-
-            }
-
-            @Override
-            public void onResponse(Response response) {
-
-            }
-
-            @Override
-            public void onFailure(Request request, Exception e) {
-
-            }
+        okHttpUtils.get(url,new SimpleCallback<User>() {
 
             @Override
             public void onSuccess(Response response, User user) {
                 saveUserInfo(user);
-            }
-
-            @Override
-            public void OnError(Response response, int code, Exception e) {
-
             }
         });
 

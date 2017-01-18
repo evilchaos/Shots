@@ -1,6 +1,8 @@
 package com.dribbble.evilchaos.shots.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -8,9 +10,11 @@ import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
+import android.view.View;
 import android.widget.TextView;
 
 import com.dribbble.evilchaos.shots.R;
+import com.dribbble.evilchaos.shots.activity.ProfileActivity;
 import com.dribbble.evilchaos.shots.entity.CommentItem;
 import com.dribbble.evilchaos.shots.util.TimeUtils;
 import com.dribbble.evilchaos.shots.widget.NoUnderlineSpan;
@@ -30,8 +34,19 @@ public class CommentAdapter extends SimpleAdapter<CommentItem> {
     }
 
     @Override
-    public void bindData(BaseViewHolder viewHolder, CommentItem commentItem) {
+    public void bindData(BaseViewHolder viewHolder, final CommentItem commentItem) {
         SimpleDraweeView  commenterAvatar = (SimpleDraweeView)viewHolder.getView(R.id.comment_author_avatar);
+        commenterAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, ProfileActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("user_name",commentItem.getUser().getUsername());
+                intent.putExtras(bundle);
+                mContext.startActivity(intent);
+            }
+        });
+
         commenterAvatar.setImageURI(commentItem.getUser().getAvatar_url());
 
         viewHolder.getTextView(R.id.commenter_name).setText(commentItem.getUser().getName());
@@ -44,8 +59,8 @@ public class CommentAdapter extends SimpleAdapter<CommentItem> {
         removeHyperLinkUnderline(commTextView);
 
         viewHolder.getTextView(R.id.comment_time).setText(TimeUtils.getTimeFromStandardFormat(commentItem.getUpdated_at()));
-
         viewHolder.getTextView(R.id.comment_like_number).setText(String.valueOf(commentItem.getLikes_count()));
+
     }
 
     private void setDescriptionLinks(TextView desTextView,String str) {

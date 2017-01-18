@@ -20,14 +20,13 @@ import com.dribbble.evilchaos.shots.activity.LoginActivity;
 import com.dribbble.evilchaos.shots.activity.UserLikesActivity;
 import com.dribbble.evilchaos.shots.activity.UserShotsActivity;
 import com.dribbble.evilchaos.shots.entity.User;
-import com.dribbble.evilchaos.shots.http.BaseCallback;
 import com.dribbble.evilchaos.shots.http.OkHttpUtils;
+import com.dribbble.evilchaos.shots.http.SimpleCallback;
 import com.dribbble.evilchaos.shots.util.API;
 import com.dribbble.evilchaos.shots.util.UserLocalData;
 import com.dribbble.evilchaos.shots.widget.AppleItemView;
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import okhttp3.Request;
 import okhttp3.Response;
 
 
@@ -129,21 +128,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             url = API.dribbble_user_info + mBundle.getString("user_name") +"?access_token=" + accessToken;
         }
 
-        okHttpUtils.get(url,new BaseCallback<User>() {
-            @Override
-            public void onBeforeRequest(Request request) {
-
-            }
-
-            @Override
-            public void onResponse(Response response) {
-
-            }
-
-            @Override
-            public void onFailure(Request request, Exception e) {
-
-            }
+        okHttpUtils.get(url,new SimpleCallback<User>() {
 
             @Override
             public void onSuccess(Response response, User user) {
@@ -151,10 +136,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 showUserInfo(user);
             }
 
-            @Override
-            public void OnError(Response response, int code, Exception e) {
-
-            }
         });
 
     }
@@ -206,7 +187,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         User user = UserLocalData.getUser(mContext);
-        //String tag = null;
         Intent intent;
         switch (v.getId()) {
             case R.id.user_followers:
@@ -229,16 +209,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 String shots_url = user.getShots_url();
                 intent = new Intent(getContext(), UserShotsActivity.class);
                 intent.putExtra("name",user.getName());
-                //tag = "shots_tag";
                 intent.putExtra("shots_url",shots_url);
                 startActivity(intent);
                 break;
 
             case R.id.app_likes:
-                //传tag
                 String likes_url = user.getLikes_url();
                 intent = new Intent(getContext(), UserLikesActivity.class);
-                //tag = "likes_tag";
                 intent.putExtra("name",user.getName());
                 intent.putExtra("likes_url",likes_url);
                 startActivity(intent);
@@ -259,6 +236,5 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 getActivity().finish();
                 break;
         }
-        //intent.putExtra(TAG,tag);
     }
 }

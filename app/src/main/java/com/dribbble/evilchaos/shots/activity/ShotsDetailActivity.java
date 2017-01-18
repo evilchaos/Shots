@@ -1,5 +1,7 @@
 package com.dribbble.evilchaos.shots.activity;
 
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,11 +26,14 @@ import com.dribbble.evilchaos.shots.R;
 import com.dribbble.evilchaos.shots.adapter.CommListAdapter;
 import com.dribbble.evilchaos.shots.adapter.CommentAdapter;
 import com.dribbble.evilchaos.shots.entity.CommentItem;
+import com.dribbble.evilchaos.shots.entity.LikeInfo;
 import com.dribbble.evilchaos.shots.entity.ShotItem;
 import com.dribbble.evilchaos.shots.http.BaseCallback;
 import com.dribbble.evilchaos.shots.http.OkHttpUtils;
+import com.dribbble.evilchaos.shots.http.SimpleCallback;
 import com.dribbble.evilchaos.shots.util.API;
 import com.dribbble.evilchaos.shots.util.TimeUtils;
+import com.dribbble.evilchaos.shots.util.UserLocalData;
 import com.dribbble.evilchaos.shots.widget.AdaptableLinearLayout;
 import com.dribbble.evilchaos.shots.widget.DividerItemDecoration;
 import com.dribbble.evilchaos.shots.widget.DrawableCenterTextView;
@@ -52,7 +57,7 @@ import uk.co.chrisjenx.calligraphy.TypefaceUtils;
  * Created by liujiachao on 2016/12/24.
  */
 
-public class ShotsDetailActivity extends BaseActivity {
+public class ShotsDetailActivity extends BaseActivity implements View.OnClickListener{
 
     private OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
 
@@ -74,8 +79,8 @@ public class ShotsDetailActivity extends BaseActivity {
 
     List<CommentItem> commentItemList = new ArrayList<>();
     CommentAdapter commentAdapter;
-    //CommListAdapter commListAdapter;
-
+    private String accessToken;
+    private boolean isLike = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,6 +88,7 @@ public class ShotsDetailActivity extends BaseActivity {
         setContentView(R.layout.shot_detail_activity);
         Bundle bundle = getIntent().getExtras();
         shotItem = (ShotItem) bundle.getSerializable("shots_data");
+        accessToken = UserLocalData.getToken(this);
         initViews();
     }
 
@@ -94,12 +100,6 @@ public class ShotsDetailActivity extends BaseActivity {
         timeTextView = (TextView) findViewById(R.id.detail_shots_time);
         shotPicDrawee = (SimpleDraweeView)findViewById(R.id.detail_shot_pic);
         tvBack = (TextView)findViewById(R.id.back);
-        tvBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         expTextView = (DrawableCenterTextView)findViewById(R.id.detail_view_num);
         likeTextView = (DrawableCenterTextView)findViewById(R.id.detail_like_num);
@@ -107,6 +107,9 @@ public class ShotsDetailActivity extends BaseActivity {
 
         desTextView = (TextView)findViewById(R.id.detail_description);
         commRecyclerView = (RecyclerView) findViewById(R.id.rv_comment);
+
+        tvBack.setOnClickListener(this);
+        likeTextView.setOnClickListener(this);
 
         fillShotsInfo();
 
@@ -125,7 +128,6 @@ public class ShotsDetailActivity extends BaseActivity {
         timeTextView.setText(TimeUtils.getTimeFromStandardFormat(shotItem.getUpdated_at()));
 
         String shots_image_url = shotItem.getImages().getHeightImageUri();
-
         if (!shotItem.isAnimated()) {
             shotPicDrawee.setImageURI(shots_image_url);
         } else {
@@ -137,53 +139,64 @@ public class ShotsDetailActivity extends BaseActivity {
             shotPicDrawee.setController(draweeController);
         }
 
-        expTextView.setText(String.valueOf(shotItem.getViews_count()));
         likeTextView.setText(String.valueOf(shotItem.getLikes_count()));
+        expTextView.setText(String.valueOf(shotItem.getViews_count()));
         commTextView.setText(String.valueOf(shotItem.getComments_count()));
 
-        //处理description
-        String html = shotItem.getDescription();
+        if (accessToken != null) {
+            setLikeTextViewStyle();
+        }
 
+        setLikeTextViewStyle();
+        setDescriptionContent();
+        //评论
+        getComments();
+
+    }
+
+    private void setDescriptionContent() {
+
+        String html = shotItem.getDescription();
         if (html != null) {
             setDescriptionLinks(desTextView,html);
             removeHyperLinkUnderline(desTextView);
         } else {
             desTextView.setText("(No Description)");
         }
+    }
 
-        //评论
-         getComments();
+    private void setLikeTextViewStyle() {
+        //判断该shots是否被用户like,改变like按钮的样式
+        String url = API.url + "shots/" + String.valueOf(shotItem.getId())
+                    + "/like" + "?access_token=" + accessToken ;
+
+        okHttpUtils.get(url, new SimpleCallback<LikeInfo>() {
+
+            @Override
+            public void onSuccess(Response response, LikeInfo likeInfo) {
+                setLike();
+                setLikeStyle();
+            }
+
+            @Override
+            public void OnError(Response response, int code, Exception e) {
+                super.OnError(response, code, e);
+                setUnlike();
+            }
+        });
+
     }
 
     private void getComments() {
         int comm_num = shotItem.getComments_count();
         String url = shotItem.getComments_url() +"?per_page=" + String.valueOf(comm_num) +  "&access_token=" + API.OAUTH_TOKEN;
 
-        okHttpUtils.get(url,new BaseCallback<List<CommentItem>>() {
-            @Override
-            public void onBeforeRequest(Request request) {
-
-            }
-
-            @Override
-            public void onResponse(Response response) {
-
-            }
-
-            @Override
-            public void onFailure(Request request, Exception e) {
-
-            }
+        okHttpUtils.get(url,new SimpleCallback<List<CommentItem>>() {
 
             @Override
             public void onSuccess(Response response, List<CommentItem> commentItems) {
                 commentItemList =  commentItems;
                 showComment();
-            }
-
-            @Override
-            public void OnError(Response response, int code, Exception e) {
-
             }
         });
 
@@ -220,4 +233,63 @@ public class ShotsDetailActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.back:
+                finish();
+                break;
+
+            case R.id.detail_like_num:
+                if (accessToken == null) {
+                    Intent intent = new Intent(this,LoginActivity.class);
+                    startActivity(intent);
+                } else if (isLike){
+                    //delete like
+                    setUnlikeStyle();
+                    deleteLikeTag();
+                } else {
+                    //post like
+                    setLikeStyle();
+                    postLikeTag();
+                }
+                break;
+        }
+    }
+
+    private void postLikeTag() {
+    }
+
+    private void deleteLikeTag() {
+        String url = API.url + "shots/" + String.valueOf(shotItem.getId())
+                + "/like" + "?access_token=" + accessToken ;
+        okHttpUtils.delete(url,new SimpleCallback<Object>(){
+            @Override
+            public void onSuccess(Response response, Object o) {
+
+            }
+        });
+    }
+
+    private void setLike() {
+        isLike = true;
+    }
+
+    private void setUnlike() {
+        isLike = false;
+    }
+
+    private void setLikeStyle() {
+        likeTextView.setTextColor(getResources().getColor(R.color.project_pink));
+        Drawable leftDrawable = getResources().getDrawable(R.drawable.iv_like_pink_24dp);
+        leftDrawable.setBounds(0, 0, leftDrawable.getMinimumWidth(), leftDrawable.getMinimumHeight());
+        likeTextView.setCompoundDrawables(leftDrawable,null,null,null);
+    }
+
+    private void setUnlikeStyle() {
+        likeTextView.setTextColor(getResources().getColor(R.color.text_grey));
+        Drawable leftDrawable = getResources().getDrawable(R.drawable.iv_like_grey_24dp);
+        leftDrawable.setBounds(0, 0, leftDrawable.getMinimumWidth(), leftDrawable.getMinimumHeight());
+        likeTextView.setCompoundDrawables(leftDrawable,null,null,null);
+    }
 }
