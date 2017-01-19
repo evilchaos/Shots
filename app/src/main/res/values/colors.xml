@@ -11,7 +11,10 @@
     <color name="text_grey">#9DA0A3</color>
     <color name="text_blue">#5593bc</color>
     <color name="text_black">#737373</color>
-    <color name="divider">#ECECEC</color>
+    <color name="divider">#e5e5e5</color>
     <color name="transparent">#0000</color>
     <color name="project_pink">#EA4C89</color>
+    <color name="color_input">#f9f9f9</color>
+    <color name="color_c6c6c6">#c6c6c6</color>
+    <color name="text_hint_color">#bababa</color>
 </resources>

@@ -117,6 +117,10 @@ public class OkHttpUtils {
 
     private FormBody buildRequestBody(Map<String,String> params) {
         FormBody.Builder body = new FormBody.Builder();
+        if (params == null) {
+            return body.build();
+        }
+
         for (Map.Entry<String,String> entry :params.entrySet()) {
             body.add(entry.getKey(),entry.getValue());
         }

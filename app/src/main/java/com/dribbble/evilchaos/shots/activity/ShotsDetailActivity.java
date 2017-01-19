@@ -15,6 +15,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -60,6 +61,8 @@ import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 public class ShotsDetailActivity extends BaseActivity implements View.OnClickListener{
 
     private OkHttpUtils okHttpUtils = OkHttpUtils.getInstance();
+    public static final int DELETE_NO_CONTENT = 204;
+    public static final int POST_LIKE_CREATED = 201;
 
     ShotItem shotItem;
     SimpleDraweeView shotPicAvatar;
@@ -167,9 +170,7 @@ public class ShotsDetailActivity extends BaseActivity implements View.OnClickLis
 
     private void setLikeTextViewStyle() {
         //判断该shots是否被用户like,改变like按钮的样式
-        String url = API.url + "shots/" + String.valueOf(shotItem.getId())
-                    + "/like" + "?access_token=" + accessToken ;
-
+        String url = buildLikeRequestUrl();
         okHttpUtils.get(url, new SimpleCallback<LikeInfo>() {
 
             @Override
@@ -182,21 +183,6 @@ public class ShotsDetailActivity extends BaseActivity implements View.OnClickLis
             public void OnError(Response response, int code, Exception e) {
                 super.OnError(response, code, e);
                 setUnlike();
-            }
-        });
-
-    }
-
-    private void getComments() {
-        int comm_num = shotItem.getComments_count();
-        String url = shotItem.getComments_url() +"?per_page=" + String.valueOf(comm_num) +  "&access_token=" + API.OAUTH_TOKEN;
-
-        okHttpUtils.get(url,new SimpleCallback<List<CommentItem>>() {
-
-            @Override
-            public void onSuccess(Response response, List<CommentItem> commentItems) {
-                commentItemList =  commentItems;
-                showComment();
             }
         });
 
@@ -233,50 +219,45 @@ public class ShotsDetailActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.back:
-                finish();
-                break;
+    private void getComments() {
+        int comm_num = shotItem.getComments_count();
+        String url = shotItem.getComments_url() +"?per_page=" + String.valueOf(comm_num) +  "&access_token=" + API.OAUTH_TOKEN;
 
-            case R.id.detail_like_num:
-                if (accessToken == null) {
-                    Intent intent = new Intent(this,LoginActivity.class);
-                    startActivity(intent);
-                } else if (isLike){
-                    //delete like
-                    setUnlikeStyle();
-                    deleteLikeTag();
-                } else {
-                    //post like
-                    setLikeStyle();
-                    postLikeTag();
-                }
-                break;
-        }
+        okHttpUtils.get(url,new SimpleCallback<List<CommentItem>>() {
+
+            @Override
+            public void onSuccess(Response response, List<CommentItem> commentItems) {
+                commentItemList =  commentItems;
+                showComment();
+            }
+        });
+
     }
 
     private void postLikeTag() {
-    }
-
-    private void deleteLikeTag() {
-        String url = API.url + "shots/" + String.valueOf(shotItem.getId())
-                + "/like" + "?access_token=" + accessToken ;
-        okHttpUtils.delete(url,new SimpleCallback<Object>(){
+        String url = buildLikeRequestUrl();
+        okHttpUtils.post(url, null, new SimpleCallback<LikeInfo>() {
             @Override
-            public void onSuccess(Response response, Object o) {
-
+            public void onSuccess(Response response, LikeInfo likeInfo) {
+                if (response.code() == POST_LIKE_CREATED) {
+                    //在后台操作成功后的回调，比如改变一些控件相关参数，比如评论数量等等
+                    Log.i("tag","like success");
+                }
             }
         });
     }
 
-    private void setLike() {
-        isLike = true;
-    }
-
-    private void setUnlike() {
-        isLike = false;
+    private void deleteLikeTag() {
+        String url = buildLikeRequestUrl();
+        okHttpUtils.delete(url,new SimpleCallback<Object>(){
+            @Override
+            public void onSuccess(Response response, Object o) {
+                if (response.code() == DELETE_NO_CONTENT) {
+                    //在后台操作成功后的回调，比如改变一些控件相关参数，比如评论数量等等
+                    Log.i("tag","unlike success");
+                }
+            }
+        });
     }
 
     private void setLikeStyle() {
@@ -292,4 +273,62 @@ public class ShotsDetailActivity extends BaseActivity implements View.OnClickLis
         leftDrawable.setBounds(0, 0, leftDrawable.getMinimumWidth(), leftDrawable.getMinimumHeight());
         likeTextView.setCompoundDrawables(leftDrawable,null,null,null);
     }
+
+    private String buildLikeRequestUrl() {
+        return ( API.url + "shots/" + String.valueOf(shotItem.getId())
+                + "/like" + "?access_token=" + accessToken ) ;
+    }
+
+    private void setLike() {
+        isLike = true;
+    }
+
+    private void setUnlike() {
+        isLike = false;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.back:
+                finish();
+                break;
+
+            case R.id.detail_like_num:
+                if (accessToken == null) {
+                    Intent intent = new Intent(this,LoginActivity.class);
+                    startActivity(intent);
+                } else if (isLike){
+                    //delete like
+                    setUnlike();
+                    decreaseLikeNum();
+                    setUnlikeStyle();
+                    deleteLikeTag();
+                } else {
+                    //post like
+                    setLike();
+                    increaseLikeNum();
+                    setLikeStyle();
+                    postLikeTag();
+                }
+                break;
+        }
+    }
+
+    private int getLikeNumFromTextView() {
+        return Integer.parseInt(likeTextView.getText().toString());
+    }
+
+    private void increaseLikeNum() {
+        int currNum = getLikeNumFromTextView();
+        currNum++;
+        likeTextView.setText(String.valueOf(currNum));
+    }
+
+    private void decreaseLikeNum() {
+        int currNum = getLikeNumFromTextView();
+        currNum--;
+        likeTextView.setText(String.valueOf(currNum));
+    }
+
 }
