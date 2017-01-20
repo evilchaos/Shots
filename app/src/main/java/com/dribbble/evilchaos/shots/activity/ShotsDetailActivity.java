@@ -18,6 +18,7 @@ import android.text.util.Linkify;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -33,6 +34,7 @@ import com.dribbble.evilchaos.shots.http.BaseCallback;
 import com.dribbble.evilchaos.shots.http.OkHttpUtils;
 import com.dribbble.evilchaos.shots.http.SimpleCallback;
 import com.dribbble.evilchaos.shots.util.API;
+import com.dribbble.evilchaos.shots.util.InputMethodUtils;
 import com.dribbble.evilchaos.shots.util.TimeUtils;
 import com.dribbble.evilchaos.shots.util.UserLocalData;
 import com.dribbble.evilchaos.shots.widget.AdaptableLinearLayout;
@@ -64,18 +66,20 @@ public class ShotsDetailActivity extends BaseActivity implements View.OnClickLis
     public static final int DELETE_NO_CONTENT = 204;
     public static final int POST_LIKE_CREATED = 201;
 
-    ShotItem shotItem;
-    SimpleDraweeView shotPicAvatar;
-    TextView titleTextView;
-    TextView userNameTextView;
-    TextView timeTextView;
-    SimpleDraweeView shotPicDrawee;
-    DrawableCenterTextView expTextView;
-    DrawableCenterTextView likeTextView;
-    DrawableCenterTextView commTextView;
-    TextView desTextView;
-    RecyclerView commRecyclerView;
+    private ShotItem shotItem;
+    private SimpleDraweeView shotPicAvatar;
+    private TextView titleTextView;
+    private TextView userNameTextView;
+    private TextView timeTextView;
+    private SimpleDraweeView shotPicDrawee;
+    private DrawableCenterTextView expTextView;
+    private DrawableCenterTextView likeTextView;
+    private DrawableCenterTextView commTextView;
+    private TextView desTextView;
+    private RecyclerView commRecyclerView;
     private TextView tvBack;
+    private EditText mInputBox;
+    private LinearLayout mInputLayout;
 
     private LinearLayout detailShotsHeader;
     //NestedListView commListView;
@@ -107,12 +111,15 @@ public class ShotsDetailActivity extends BaseActivity implements View.OnClickLis
         expTextView = (DrawableCenterTextView)findViewById(R.id.detail_view_num);
         likeTextView = (DrawableCenterTextView)findViewById(R.id.detail_like_num);
         commTextView = (DrawableCenterTextView)findViewById(R.id.detail_comm_num);
+        mInputBox = (EditText)findViewById(R.id.ed_input);
+        mInputLayout = (LinearLayout)findViewById(R.id.ll_input);
 
         desTextView = (TextView)findViewById(R.id.detail_description);
         commRecyclerView = (RecyclerView) findViewById(R.id.rv_comment);
 
         tvBack.setOnClickListener(this);
         likeTextView.setOnClickListener(this);
+        commTextView.setOnClickListener(this);
 
         fillShotsInfo();
 
@@ -312,7 +319,15 @@ public class ShotsDetailActivity extends BaseActivity implements View.OnClickLis
                     postLikeTag();
                 }
                 break;
+
+            case R.id.detail_comm_num:
+                showInputBox();
         }
+    }
+
+    private void showInputBox() {
+        mInputLayout.setVisibility(View.VISIBLE);
+        InputMethodUtils.showInputMethod(mInputBox);
     }
 
     private int getLikeNumFromTextView() {

@@ -3,12 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="50dp"
     android:id="@+id/ll_input"
-    android:background="@color/color_input">
+    android:background="@color/color_input"
+
+    >
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:background="@color/divider"
         />
     <LinearLayout
@@ -18,10 +20,11 @@
         >
 
         <EditText
-            android:layout_width="250dp"
-            android:layout_height="40dp"
+            android:id="@+id/ed_input"
+            android:layout_width="220dp"
+            android:layout_height="32dp"
             android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
+            android:layout_marginRight="35dp"
             android:layout_gravity="center"
             android:gravity="center_vertical"
             android:background="@drawable/bg_input_edittext"
@@ -34,12 +37,12 @@
 
         <TextView
             android:id="@+id/btn_send"
-            android:layout_width="65dp"
-            android:layout_height="40dp"
+            android:layout_width="55dp"
+            android:layout_height="32dp"
             android:clickable="true"
             android:layout_gravity="center_vertical"
             android:gravity="center"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="5dp"
             android:background="@drawable/bg_send_button"
             fontPath= "fonts/YatraOne-Regular.ttf"
             tools:ignore="MissingPrefix"
